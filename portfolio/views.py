@@ -4,6 +4,7 @@ View'lar:
   - contact_api : aloqa formasi (POST) -> Telegram botga xabar yuboradi
 """
 import json
+import re
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -35,7 +36,18 @@ SITE = {
     "instagram_user": "@raximboy_ibrohimov",
 }
 
-MAX_LEN = {"name": 100, "contact": 150, "message": 3000}
+MAX_LEN = {"name": 100, "contact": 150, "phone": 30, "message": 3000}
+
+# Telefon: ixtiyoriy ajratuvchilarni (bo'sh joy, + - ( )) tashlab, 7–15 ta raqam bo'lishi shart (E.164).
+_PHONE_RE = re.compile(r"^\d{7,15}$")
+
+
+def _phone_ok(value: str) -> bool:
+    """Bo'sh -> True (ixtiyoriy). Aks holda faqat to'g'ri xalqaro raqam qabul qilinadi."""
+    if not value:
+        return True
+    digits = re.sub(r"[\s()+-]", "", value)
+    return bool(_PHONE_RE.match(digits))
 
 # Oddiy rate limiting (IP bo'yicha). LocMemCache ishlatiladi — har gunicorn worker'da
 # alohida hisoblanadi; kuchliroq himoya uchun Redis cache ulang.
@@ -102,10 +114,14 @@ def contact_api(request):
 
     name = (data.get("name") or "").strip()[: MAX_LEN["name"]]
     contact = (data.get("contact") or "").strip()[: MAX_LEN["contact"]]
+    phone = (data.get("phone") or "").strip()[: MAX_LEN["phone"]]
     message = (data.get("message") or "").strip()[: MAX_LEN["message"]]
 
     if not name or not message:
         return JsonResponse({"ok": False, "error": "missing_fields"}, status=422)
+
+    if not _phone_ok(phone):
+        return JsonResponse({"ok": False, "error": "bad_phone"}, status=422)
 
     # --- Rate limiting (IP bo'yicha) ---
     rl_key = "contact_rl_" + _client_ip(request)
@@ -124,6 +140,7 @@ def contact_api(request):
         "🟢 <b>Yangi xabar — ibrohimov-dev.uz</b>\n\n"
         f"👤 <b>Ism:</b> {_esc(name)}\n"
         f"📨 <b>Aloqa:</b> {_esc(contact) or '—'}\n"
+        f"📞 <b>Telefon:</b> {_esc(phone) or '—'}\n"
         f"💬 <b>Xabar:</b>\n{_esc(message)}"
     )
 

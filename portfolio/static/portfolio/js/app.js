@@ -245,26 +245,42 @@
     const statusEl = $("#cf-status"), btn = $("#cf-send");
     const setStatus = (key, ok) => { statusEl.textContent = t(key); statusEl.className = "cf-status " + (ok ? "ok" : "err"); };
 
+    // Telefon: yozish paytida faqat ruxsat etilgan belgilar (raqam, bo'sh joy, + - ( ));
+    // "+" faqat eng boshida turishi mumkin.
+    const phoneEl = $("#cf-phone");
+    if (phoneEl) {
+      phoneEl.addEventListener("input", () => {
+        let v = phoneEl.value.replace(/[^\d\s()+-]/g, "");        // taqiqlangan belgilarni olib tashlash
+        v = v.replace(/(?!^)\+/g, "");                            // "+" faqat boshida
+        if (phoneEl.value !== v) phoneEl.value = v;
+      });
+    }
+    // To'g'ri raqammi? — ixtiyoriy ajratuvchilarni tashlab, 7–15 ta raqam bo'lsin.
+    const phoneValid = (v) => { const d = v.replace(/[\s()+-]/g, ""); return /^\d{7,15}$/.test(d); };
+
     form.addEventListener("submit", async e => {
       e.preventDefault();
       const name = $("#cf-name").value.trim();
       const contact = $("#cf-contact").value.trim();
+      const phone = $("#cf-phone").value.trim();
       const message = $("#cf-message").value.trim();
       const website = (form.querySelector('input[name="website"]') || {}).value || "";
       const token = (form.querySelector('input[name="csrfmiddlewaretoken"]') || {}).value || "";
       if (!name || !message) { setStatus("contact.form.missing", false); return; }
+      if (phone && !phoneValid(phone)) { setStatus("contact.form.phone_invalid", false); phoneEl.focus(); return; }
 
       btn.disabled = true; statusEl.textContent = t("contact.form.sending"); statusEl.className = "cf-status";
       try {
         const resp = await fetch("/api/contact/", {
           method: "POST",
           headers: { "Content-Type": "application/json", "X-CSRFToken": token },
-          body: JSON.stringify({ name, contact, message, website }),
+          body: JSON.stringify({ name, contact, phone, message, website }),
         });
         const data = await resp.json().catch(() => ({}));
         if (resp.ok && data.ok) { setStatus("contact.form.ok", true); form.reset(); }
         else if (resp.status === 429 || data.error === "rate_limited") setStatus("contact.form.rate", false);
         else if (resp.status === 503 || data.error === "not_configured") setStatus("contact.form.not_configured", false);
+        else if (data.error === "bad_phone") setStatus("contact.form.phone_invalid", false);
         else setStatus("contact.form.err", false);
       } catch (_) { setStatus("contact.form.err", false); }
       finally { btn.disabled = false; }
