@@ -1,0 +1,293 @@
+{% load static %}<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ site.name }} — {{ site.role }}</title>
+
+  <meta name="description" content="Raximboy Ibrohimov — Backend & Mobile dasturchi (Python · Django · Flutter). boss-school.uz, alazizacademy.uz va boshqa loyihalar.">
+  <meta name="author" content="{{ site.name }}">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ site.name }} — {{ site.role }}">
+  <meta property="og:description" content="Backend & Mobile dasturchi · Python · Django · Flutter">
+  <meta property="og:url" content="{{ site.url }}">
+
+  <link rel="icon" type="image/svg+xml" href="{% static 'portfolio/img/favicon.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
+
+  <script>
+    (function () {
+      document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
+      document.documentElement.setAttribute("lang", localStorage.getItem("lang") || "uz");
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- fon effektlari -->
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="glow-orb" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="spotlight" aria-hidden="true"></div>
+  <div id="progress" aria-hidden="true"></div>
+
+  <!-- ============================== NAV ============================== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="logo" aria-label="Bosh sahifa">Raximboy<b>.dev</b><span>_</span></a>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#about" data-i18n="nav.about">Men haqimda</a>
+        <a href="#skills" data-i18n="nav.skills">Ko'nikmalar</a>
+        <a href="#projects" data-i18n="nav.projects">Loyihalar</a>
+        <a href="#contact" data-i18n="nav.contact">Aloqa</a>
+      </div>
+
+      <div class="nav-tools">
+        <div class="lang-switch" role="group" aria-label="Til / Язык / Language">
+          <button data-lang="uz" class="active" aria-pressed="true">UZ</button>
+          <button data-lang="ru" aria-pressed="false">RU</button>
+          <button data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Temani almashtirish">
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <button class="icon-btn burger" id="burger" aria-label="Menyu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ============================== HERO ============================= -->
+  <header class="hero" id="hero">
+    <!-- Matrix uslubidagi tushuvchi kod/raqamlar yomg'iri -->
+    <canvas id="matrix" class="matrix-rain" aria-hidden="true"></canvas>
+    <!-- orqa fonda jonli kod yoziladi + natijalar -->
+    <div class="code-stream" aria-hidden="true"><div id="codeStream"></div></div>
+
+    <div class="hero-inner">
+      <div class="hero-text">
+        <div class="badge-avail reveal">
+          <span class="dot-live" aria-hidden="true"></span>
+          <span data-i18n="hero.available">Yangi loyihalar uchun ochiqman</span>
+        </div>
+        <h1 class="reveal d1">
+          <span class="greet" data-i18n="hero.greeting">Assalomu alaykum, men</span>
+          <span class="name">Raximboy Ibrohimov</span>
+        </h1>
+        <div class="typed-line reveal d2"><span id="typed"></span><span class="typed-cursor" aria-hidden="true"></span></div>
+        <p class="lead reveal d2" data-i18n="hero.tagline">Python, Django va Flutter yordamida tez, ishonchli va chiroyli mahsulotlar yarataman.</p>
+
+        <div class="cta-row reveal d3">
+          <a href="#projects" class="btn btn-primary">
+            <span data-i18n="hero.cta_projects">Loyihalarni ko'rish</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-ghost"><span data-i18n="hero.cta_contact">Bog'lanish</span></a>
+        </div>
+
+        <div class="socials reveal d4">
+          <a href="{{ site.github }}" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.4 9.4 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg>
+          </a>
+          <a href="{{ site.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.82-2.05 3.75-2.05C20.5 8.65 22 11 22 14.6V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg>
+          </a>
+          <a href="{{ site.telegram }}" target="_blank" rel="noopener" aria-label="Telegram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.5 18.6 20.2c-.25 1.1-.92 1.38-1.86.86l-5.14-3.79-2.48 2.39c-.27.27-.5.5-1.03.5l.37-5.23 9.52-8.6c.41-.37-.09-.57-.64-.2L5.1 13.34l-5.07-1.59c-1.1-.34-1.12-1.1.23-1.63l19.8-7.63c.92-.34 1.72.2 1.42 1.63z" transform="translate(1 0)"/></svg>
+          </a>
+          <a href="{{ site.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a href="mailto:{{ site.email }}" aria-label="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- dekorativ kod kartasi -->
+      <div class="hero-card reveal d3" id="heroCard" aria-hidden="true">
+        <div class="hc-dots"><i></i><i></i><i></i></div>
+<pre><span class="k">const</span> dev = {
+  name:      <span class="s">"Raximboy"</span>,
+  role:      <span class="s">"Software Dev"</span>,
+  stack:     [<span class="s">"Django"</span>, <span class="s">"Flutter"</span>],
+  location:  <span class="s">"Tashkent 🇺🇿"</span>,
+  coffee:    <span class="p">Infinity</span>,
+  available: <span class="p">true</span>,
+}</pre>
+      </div>
+    </div>
+
+    <a href="#about" class="scroll-hint" aria-label="Pastga">
+      <span class="mouse" aria-hidden="true"></span>
+      <span>scroll</span>
+    </a>
+  </header>
+
+  <!-- ============================ MARQUEE ============================ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <span>Backend</span><span class="out">Mobile</span><span>Python</span><span class="out">Django</span><span>Flutter</span><span class="out">REST&nbsp;API</span><span>Docker</span><span class="out">PostgreSQL</span>
+      <span>Backend</span><span class="out">Mobile</span><span>Python</span><span class="out">Django</span><span>Flutter</span><span class="out">REST&nbsp;API</span><span>Docker</span><span class="out">PostgreSQL</span>
+    </div>
+  </div>
+
+  <!-- ============================= ABOUT ============================= -->
+  <section id="about">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="about.kicker">01 — Tanishuv</div>
+      <h2 class="section-title reveal" data-i18n="about.title">Men haqimda</h2>
+
+      <div class="about-grid">
+        <div class="about-text reveal d1">
+          <p data-i18n="about.p1">Men O'zbekistonlik Backend va Mobile dasturchiman. Toza kod va chiroyli interfeyslarni yaxshi ko'raman.</p>
+          <p data-i18n="about.p2">boss-school.uz va alazizacademy.uz ta'lim platformalari hamda ularning mobil ilovalarini ishlab chiqdim.</p>
+          <p class="mono" style="color:var(--brand-2)" data-i18n="about.fun_fact">Men qahvani toza kodga aylantiraman ☕</p>
+
+          <div class="stats">
+            <div class="stat glass reveal d1"><div class="num" data-count="5">0</div><div class="lbl" data-i18n="about.stat_projects">Loyiha</div></div>
+            <div class="stat glass reveal d2"><div class="num" data-count="10">0</div><div class="lbl" data-i18n="about.stat_years">Yil tajriba</div></div>
+            <div class="stat glass reveal d3"><div class="num" data-count="10">0</div><div class="lbl" data-i18n="about.stat_apps">Mobil ilova</div></div>
+          </div>
+        </div>
+
+        <div class="facts reveal d2">
+          <div class="fact glass">
+            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 6 4-4 4 4M12 2v14M5 14l-2 4a2 2 0 0 0 1.8 3h14.4A2 2 0 0 0 21 18l-2-4"/></svg></span>
+            <div><div class="ft" data-i18n="about.fact_focus">Yo'nalish</div><div class="fv" data-i18n="about.fact_focus_v">Backend &amp; Mobile</div></div>
+          </div>
+          <div class="fact glass">
+            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+            <div><div class="ft" data-i18n="about.fact_location">Joylashuv</div><div class="fv" data-i18n="about.fact_location_v">Toshkent, O'zbekiston</div></div>
+          </div>
+          <div class="fact glass">
+            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></span>
+            <div><div class="ft" data-i18n="about.fact_exp">Tajriba</div><div class="fv" data-i18n="about.fact_exp_v">10+ yil</div></div>
+          </div>
+          <div class="fact glass">
+            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+            <div><div class="ft" data-i18n="about.fact_learning">O'rganmoqdaman</div><div class="fv">Redis · React Native</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SKILLS ============================ -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="skills.kicker">02 — Texnologiyalar</div>
+      <h2 class="section-title reveal" data-i18n="skills.title">Ko'nikmalar</h2>
+      <p class="section-sub reveal d1" data-i18n="skills.subtitle">Men kundalik ishimda foydalanadigan asboblar</p>
+
+      <div class="skills-grid">
+        <div class="skill-card glass reveal d1">
+          <h3><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m8 18-6-6 6-6M16 6l6 6-6 6"/></svg></span><span data-i18n="skills.h_lang">Dasturlash tillari</span></h3>
+          <div class="chips"><span class="chip">Python</span><span class="chip">Dart</span><span class="chip">Swift</span><span class="chip">JavaScript</span><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">SQL</span></div>
+        </div>
+        <div class="skill-card glass reveal d2">
+          <h3><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18M9 21V9"/></svg></span><span data-i18n="skills.h_frame">Freymvork &amp; Kutubxonalar</span></h3>
+          <div class="chips"><span class="chip">Django</span><span class="chip">DRF</span><span class="chip">Flutter</span><span class="chip">REST API</span></div>
+        </div>
+        <div class="skill-card glass reveal d1">
+          <h3><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg></span><span data-i18n="skills.h_db">Ma'lumotlar bazalari</span></h3>
+          <div class="chips"><span class="chip">PostgreSQL</span><span class="chip">MySQL</span><span class="chip">Firebase</span><span class="chip">Redis</span></div>
+        </div>
+        <div class="skill-card glass reveal d2">
+          <h3><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 2 7l10 5 10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></span><span data-i18n="skills.h_devops">DevOps &amp; Vositalar</span></h3>
+          <div class="chips"><span class="chip">Docker</span><span class="chip">Linux</span><span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">VS Code</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================== PROJECTS =========================== -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="projects.kicker">03 — Ishlarim</div>
+      <h2 class="section-title reveal" data-i18n="projects.title">Loyihalar</h2>
+      <p class="section-sub reveal d1" data-i18n="projects.subtitle">Men yaratgan va ishtirok etgan loyihalar</p>
+      <div class="proj-grid" id="projGrid"><!-- app.js PROJECTS dan render qiladi --></div>
+    </div>
+  </section>
+
+  <!-- ============================ CONTACT =========================== -->
+  <section id="contact">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="contact.kicker">04 — Aloqa</div>
+      <h2 class="section-title reveal" data-i18n="contact.title">Keling, gaplashamiz</h2>
+      <p class="section-sub reveal d1" data-i18n="contact.subtitle">Loyiha, hamkorlik yoki shunchaki salom — yozing, javob beraman!</p>
+
+      <div class="contact-grid">
+        <div class="contact-side reveal d1">
+          <a class="clink glass" href="mailto:{{ site.email }}">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+            <div><div class="ck">Email</div><div class="cv">{{ site.email }}</div></div>
+          </a>
+          <a class="clink glass" href="{{ site.telegram }}" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.5 18.6 20.2c-.25 1.1-.92 1.38-1.86.86l-5.14-3.79-2.48 2.39c-.27.27-.5.5-1.03.5l.37-5.23 9.52-8.6c.41-.37-.09-.57-.64-.2L5.1 13.34l-5.07-1.59c-1.1-.34-1.12-1.1.23-1.63l19.8-7.63c.92-.34 1.72.2 1.42 1.63z" transform="translate(1 0)"/></svg></span>
+            <div><div class="ck">Telegram</div><div class="cv">{{ site.telegram_user }}</div></div>
+          </a>
+          <a class="clink glass" href="{{ site.github }}" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.4 9.4 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></span>
+            <div><div class="ck">GitHub</div><div class="cv">{{ site.github_user }}</div></div>
+          </a>
+          <a class="clink glass" href="{{ site.linkedin }}" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.82-2.05 3.75-2.05C20.5 8.65 22 11 22 14.6V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></span>
+            <div><div class="ck">LinkedIn</div><div class="cv">Raximboy Ibroximov</div></div>
+          </a>
+          <a class="clink glass" href="{{ site.instagram }}" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+            <div><div class="ck">Instagram</div><div class="cv">{{ site.instagram_user }}</div></div>
+          </a>
+        </div>
+
+        <form class="cform glass reveal d2" id="contactForm" novalidate>
+          {% csrf_token %}
+          <div class="cf-head" data-i18n="contact.or_form">Yoki to'g'ridan-to'g'ri xabar yuboring</div>
+
+          <label for="cf-name" data-i18n="contact.form.name_label">Ismingiz</label>
+          <input type="text" name="name" id="cf-name" maxlength="100" required
+                 data-i18n-ph="contact.form.name_ph" placeholder="Ism Familiya">
+
+          <label for="cf-contact" data-i18n="contact.form.contact_label">Email yoki Telegram (ixtiyoriy)</label>
+          <input type="text" name="contact" id="cf-contact" maxlength="150"
+                 data-i18n-ph="contact.form.contact_ph" placeholder="siz@example.com / @username">
+
+          <label for="cf-message" data-i18n="contact.form.msg_label">Xabaringiz</label>
+          <textarea name="message" id="cf-message" rows="4" maxlength="3000" required
+                    data-i18n-ph="contact.form.msg_ph" placeholder="Salom Raximboy, men..."></textarea>
+
+          <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <button type="submit" class="btn btn-primary cf-send" id="cf-send">
+            <span data-i18n="contact.form.send">Xabar yuborish</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>
+          </button>
+          <div class="cf-status" id="cf-status" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="footer">
+    <div class="wrap">
+      <a href="#hero" class="up"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg><span data-i18n="footer.back">Yuqoriga</span></a>
+      <p data-i18n="footer.made">Django &amp; ☕ bilan yaratilgan</p>
+      <p class="mono" style="font-size:12px;color:var(--faint)">© 2026 Raximboy Ibrohimov · ibrohimov-dev.uz</p>
+    </div>
+  </footer>
+
+  <script src="{% static 'portfolio/js/i18n.js' %}"></script>
+  <script src="{% static 'portfolio/js/projects.js' %}"></script>
+  <script src="{% static 'portfolio/js/app.js' %}"></script>
+</body>
+</html>

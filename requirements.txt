@@ -1,0 +1,11 @@
+# ===== Core =====
+Django==6.0.4
+
+# ===== Static files (WhiteNoise serves CSS/JS in production) =====
+whitenoise==6.12.0
+
+# ===== Env variables (.env faylini o'qish uchun) =====
+python-dotenv==1.2.2
+
+# ===== Production WSGI server (Docker ichida ishlatiladi) =====
+gunicorn==23.0.0
