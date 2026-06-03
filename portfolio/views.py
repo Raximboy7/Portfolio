@@ -10,7 +10,7 @@ import urllib.request
 
 from django.conf import settings
 from django.core.cache import cache
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.http import require_POST
@@ -54,6 +54,33 @@ def _client_ip(request):
 def index(request):
     """Bitta sahifali portfolio. ensure_csrf_cookie — forma uchun CSRF cookie o'rnatadi."""
     return render(request, "portfolio/index.html", {"site": SITE})
+
+
+def robots_txt(request):
+    """Qidiruv tizimlari uchun robots.txt — sitemap'ga yo'naltiradi."""
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /api/",
+        "",
+        f"Sitemap: {SITE['url']}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines) + "\n", content_type="text/plain")
+
+
+def sitemap_xml(request):
+    """Bitta sahifali sayt uchun sitemap.xml."""
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        f'  <url>\n'
+        f'    <loc>{SITE["url"]}/</loc>\n'
+        f'    <changefreq>monthly</changefreq>\n'
+        f'    <priority>1.0</priority>\n'
+        f'  </url>\n'
+        '</urlset>\n'
+    )
+    return HttpResponse(xml, content_type="application/xml")
 
 
 @require_POST
