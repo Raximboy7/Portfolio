@@ -62,10 +62,15 @@ def _client_ip(request):
     return request.META.get("REMOTE_ADDR", "unknown")
 
 
-@ensure_csrf_cookie
 def index(request):
-    """Bitta sahifali portfolio. ensure_csrf_cookie — forma uchun CSRF cookie o'rnatadi."""
+    """Bosh sahifa (hero, about, skills, projects)."""
     return render(request, "portfolio/index.html", {"site": SITE})
+
+
+@ensure_csrf_cookie
+def contact_page(request):
+    """Alohida aloqa sahifasi. ensure_csrf_cookie — forma uchun CSRF cookie o'rnatadi."""
+    return render(request, "portfolio/contact.html", {"site": SITE})
 
 
 def robots_txt(request):

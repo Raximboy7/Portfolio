@@ -1,0 +1,94 @@
+{% extends "portfolio/base.html" %}
+
+{% block title %}{{ site.name }} — Aloqa{% endblock %}
+{% block description %}Raximboy Ibrohimov bilan bog'laning — loyiha, hamkorlik yoki savol bo'yicha to'g'ridan-to'g'ri xabar yuboring.{% endblock %}
+
+{% block logo_href %}{% url 'index' %}{% endblock %}
+{% block footer_up_href %}{% url 'contact' %}{% endblock %}
+
+{% block nav_links %}
+  <a href="{% url 'index' %}#about" data-i18n="nav.about">Men haqimda</a>
+  <a href="{% url 'index' %}#skills" data-i18n="nav.skills">Ko'nikmalar</a>
+  <a href="{% url 'index' %}#projects" data-i18n="nav.projects">Loyihalar</a>
+  <a href="{% url 'contact' %}" class="active" data-i18n="nav.contact">Aloqa</a>
+{% endblock %}
+
+{% block content %}
+  <!-- ============================ CONTACT (alohida sahifa) =========================== -->
+  <section id="contact" class="contact-page">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="contact.kicker">04 — Aloqa</div>
+      <h2 class="section-title reveal" data-i18n="contact.title">Keling, gaplashamiz</h2>
+      <p class="section-sub reveal d1" data-i18n="contact.subtitle">Loyiha, hamkorlik yoki shunchaki salom — yozing, javob beraman!</p>
+
+      <div class="contact-grid">
+        <div class="contact-side reveal d1">
+          <a class="clink glass" href="mailto:{{ site.email }}">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+            <div><div class="ck">Email</div><div class="cv">{{ site.email }}</div></div>
+          </a>
+          <a class="clink glass" href="{{ site.telegram }}" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.94 4.5 18.6 20.2c-.25 1.1-.92 1.38-1.86.86l-5.14-3.79-2.48 2.39c-.27.27-.5.5-1.03.5l.37-5.23 9.52-8.6c.41-.37-.09-.57-.64-.2L5.1 13.34l-5.07-1.59c-1.1-.34-1.12-1.1.23-1.63l19.8-7.63c.92-.34 1.72.2 1.42 1.63z" transform="translate(1 0)"/></svg></span>
+            <div><div class="ck">Telegram</div><div class="cv">{{ site.telegram_user }}</div></div>
+          </a>
+          <a class="clink glass" href="{{ site.github }}" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.49 0-.24-.01-.87-.01-1.71-2.78.62-3.37-1.21-3.37-1.21-.45-1.18-1.11-1.49-1.11-1.49-.91-.64.07-.62.07-.62 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.27 2.75 1.05A9.4 9.4 0 0 1 12 6.84c.85 0 1.71.12 2.51.34 1.91-1.32 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.25C22 6.58 17.52 2 12 2z"/></svg></span>
+            <div><div class="ck">GitHub</div><div class="cv">{{ site.github_user }}</div></div>
+          </a>
+          <a class="clink glass" href="{{ site.linkedin }}" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5A2.5 2.5 0 1 1 5 8.5a2.5 2.5 0 0 1-.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.82-2.05 3.75-2.05C20.5 8.65 22 11 22 14.6V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9z"/></svg></span>
+            <div><div class="ck">LinkedIn</div><div class="cv">Raximboy Ibroximov</div></div>
+          </a>
+          <a class="clink glass" href="{{ site.instagram }}" target="_blank" rel="noopener">
+            <span class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"/></svg></span>
+            <div><div class="ck">Instagram</div><div class="cv">{{ site.instagram_user }}</div></div>
+          </a>
+        </div>
+
+        <form class="cform glass reveal d2" id="contactForm" novalidate>
+          {% csrf_token %}
+          <div class="cf-head" data-i18n="contact.or_form">Yoki to'g'ridan-to'g'ri xabar yuboring</div>
+
+          <label for="cf-name" data-i18n="contact.form.name_label">Ismingiz</label>
+          <input type="text" name="name" id="cf-name" maxlength="100" required
+                 data-i18n-ph="contact.form.name_ph" placeholder="Ism Familiya">
+
+          <label for="cf-contact" data-i18n="contact.form.contact_label">Email yoki Telegram (ixtiyoriy)</label>
+          <input type="text" name="contact" id="cf-contact" maxlength="150"
+                 data-i18n-ph="contact.form.contact_ph" placeholder="siz@example.com / @username">
+
+          <label for="cf-phone" data-i18n="contact.form.phone_label">Telefon raqamingiz (ixtiyoriy)</label>
+          <input type="tel" name="phone" id="cf-phone" maxlength="30" inputmode="tel"
+                 data-i18n-ph="contact.form.phone_ph" placeholder="+998 90 123 45 67">
+
+          <label for="cf-message" data-i18n="contact.form.msg_label">Xabaringiz</label>
+          <textarea name="message" id="cf-message" rows="4" maxlength="3000" required
+                    data-i18n-ph="contact.form.msg_ph" placeholder="Salom Raximboy, men..."></textarea>
+
+          <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+          <button type="submit" class="btn btn-primary cf-send" id="cf-send">
+            <span data-i18n="contact.form.send">Xabar yuborish</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>
+          </button>
+          <div class="cf-status" id="cf-status" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== Muvaffaqiyat modali (xabar yuborilgach chiqadi) ============== -->
+  <div class="modal-backdrop" id="okModal" hidden>
+    <div class="modal glass" role="dialog" aria-modal="true" aria-labelledby="okm-title">
+      <button class="modal-x" id="okm-x" type="button" aria-label="Yopish">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+      <div class="modal-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h3 id="okm-title" data-i18n="contact.modal.title">Xabaringiz yuborildi!</h3>
+      <p data-i18n="contact.modal.text">Rahmat! Tez orada siz bilan bog'lanaman.</p>
+      <button class="btn btn-primary" id="okm-close" type="button" data-i18n="contact.modal.close">Yopish</button>
+    </div>
+  </div>
+{% endblock %}

@@ -184,22 +184,6 @@ section { position: relative; padding: clamp(72px, 12vh, 140px) 0; z-index: 1; }
 .hero { position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding-top: 90px; overflow: hidden; }
 .hero-inner { position: relative; z-index: 2; display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 54px; align-items: center; width: min(1140px, 90vw); margin-inline: auto; }
 
-/* Hero orqa foni: jonli "kod yozilayotgan" terminal */
-.code-stream {
-  position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  font-family: "JetBrains Mono", monospace; font-size: 13.5px; line-height: 1.72;
-  padding: 100px max(6vw, 28px) 56px;
-  -webkit-mask-image: linear-gradient(180deg, transparent 4%, #000 22%, #000 72%, transparent 96%);
-  mask-image: linear-gradient(180deg, transparent 4%, #000 22%, #000 72%, transparent 96%);
-}
-#codeStream { white-space: pre; }
-.code-stream .ln { display: block; color: var(--faint); opacity: .42; }
-.code-stream .cmd { color: var(--text); opacity: .42; }
-.code-stream .ok  { color: var(--text); opacity: .62; }
-.code-stream .out { opacity: .38; }
-.code-stream .cmt { opacity: .32; font-style: italic; }
-.code-stream .cur { display: inline-block; width: 8px; height: 1.02em; background: var(--text); opacity: .55; transform: translateY(2px); animation: blink 1s steps(1) infinite; }
 
 /* Matrix tushuvchi kod yomg'iri (canvas) */
 .matrix-rain {
@@ -354,6 +338,46 @@ section { position: relative; padding: clamp(72px, 12vh, 140px) 0; z-index: 1; }
 .cf-status { margin-top: 14px; font-size: 14px; min-height: 20px; text-align: center; }
 .cf-status.ok { color: var(--text); } .cf-status.err { color: var(--muted); }
 
+/* --------------------------- Aloqa (alohida sahifa) --------------------- */
+.contact-page { min-height: calc(100svh - 130px); padding-top: clamp(116px, 17vh, 168px); }
+
+/* ----------------- Muvaffaqiyat modali (kichik popup) ------------------- */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center; padding: 24px;
+  background: color-mix(in srgb, var(--bg) 68%, transparent);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  opacity: 0; transition: opacity .22s ease;
+}
+.modal-backdrop.show { opacity: 1; }
+.modal-backdrop[hidden] { display: none; }
+.modal {
+  position: relative; width: min(420px, 100%); padding: 40px 30px 30px; text-align: center;
+  box-shadow: var(--shadow);
+  transform: translateY(14px) scale(.96); transition: transform .22s cubic-bezier(.2,.7,.2,1);
+}
+.modal-backdrop.show .modal { transform: none; }
+.modal-icon {
+  width: 64px; height: 64px; margin: 0 auto 18px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid var(--card-border); color: var(--text);
+  animation: okpop .4s cubic-bezier(.2,.9,.3,1.4) both;
+}
+.modal-icon svg { width: 30px; height: 30px; }
+@keyframes okpop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal h3 { font-family: "Sora", sans-serif; font-size: 22px; margin-bottom: 8px; }
+.modal p { color: var(--muted); font-size: 15px; margin-bottom: 22px; }
+.modal .btn { width: 100%; justify-content: center; }
+.modal-x {
+  position: absolute; top: 12px; right: 12px; width: 34px; height: 34px;
+  display: grid; place-items: center; border-radius: 9px;
+  background: transparent; border: none; color: var(--muted); cursor: pointer;
+  transition: background .2s, color .2s;
+}
+.modal-x:hover { background: var(--card-hover); color: var(--text); }
+.modal-x svg { width: 18px; height: 18px; }
+
 /* -------------------------------- Footer -------------------------------- */
 .footer { padding: 46px 0; border-top: 1px solid var(--line); text-align: center; position: relative; z-index: 1; }
 .footer .wrap { display: flex; flex-direction: column; align-items: center; gap: 14px; }
@@ -388,8 +412,6 @@ section { position: relative; padding: clamp(72px, 12vh, 140px) 0; z-index: 1; }
   .burger { display: grid; }
 }
 @media (max-width: 600px) {
-  /* telefonda hero soddaroq: typing terminalni yashirib, faqat matrix qoladi */
-  .code-stream { display: none; }
   .hero h1 { font-size: clamp(34px, 11.5vw, 48px); }
   .hero h1 .greet { font-size: 12px; }
   .typed-line { font-size: clamp(14px, 4.4vw, 18px); }

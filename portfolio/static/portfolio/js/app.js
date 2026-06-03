@@ -151,7 +151,10 @@
     const nav = $("#nav");
     const progress = $("#progress");
     const links = $$(".nav-links a");
-    const sections = links.map(a => $(a.getAttribute("href"))).filter(Boolean);
+    // Faqat bir sahifa ichidagi langar havolalar (#id) scroll-spy'da qatnashadi —
+    // aloqa sahifasidagi "/#about" kabi havolalar querySelector'ni buzmasligi uchun.
+    const inPage = links.filter(a => (a.getAttribute("href") || "").startsWith("#"));
+    const sections = inPage.map(a => $(a.getAttribute("href"))).filter(Boolean);
     let ticking = false;
 
     function update() {
@@ -160,9 +163,11 @@
       if (progress) progress.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
       if (nav) nav.classList.toggle("scrolled", y > 20);
 
-      let active = sections[0];
-      for (const s of sections) { if (s.getBoundingClientRect().top <= window.innerHeight * 0.35) active = s; }
-      links.forEach(a => a.classList.toggle("active", active && a.getAttribute("href") === "#" + active.id));
+      if (sections.length) {
+        let active = sections[0];
+        for (const s of sections) { if (s.getBoundingClientRect().top <= window.innerHeight * 0.35) active = s; }
+        inPage.forEach(a => a.classList.toggle("active", active && a.getAttribute("href") === "#" + active.id));
+      }
       ticking = false;
     }
     window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
@@ -245,6 +250,26 @@
     const statusEl = $("#cf-status"), btn = $("#cf-send");
     const setStatus = (key, ok) => { statusEl.textContent = t(key); statusEl.className = "cf-status " + (ok ? "ok" : "err"); };
 
+    // Muvaffaqiyat modali (kichik popup). Faqat aloqa sahifasida mavjud.
+    const modal = $("#okModal");
+    const openModal = () => {
+      if (!modal) return;
+      modal.hidden = false;
+      requestAnimationFrame(() => modal.classList.add("show"));
+      const close = $("#okm-close"); if (close) close.focus();
+    };
+    const closeModal = () => {
+      if (!modal) return;
+      modal.classList.remove("show");
+      setTimeout(() => { modal.hidden = true; }, 220);
+    };
+    if (modal) {
+      $("#okm-close").addEventListener("click", closeModal);
+      $("#okm-x").addEventListener("click", closeModal);
+      modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+      document.addEventListener("keydown", e => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+    }
+
     // Telefon: yozish paytida faqat ruxsat etilgan belgilar (raqam, bo'sh joy, + - ( ));
     // "+" faqat eng boshida turishi mumkin.
     const phoneEl = $("#cf-phone");
@@ -277,7 +302,11 @@
           body: JSON.stringify({ name, contact, phone, message, website }),
         });
         const data = await resp.json().catch(() => ({}));
-        if (resp.ok && data.ok) { setStatus("contact.form.ok", true); form.reset(); }
+        if (resp.ok && data.ok) {
+          form.reset();
+          if (modal) { statusEl.textContent = ""; statusEl.className = "cf-status"; openModal(); }
+          else setStatus("contact.form.ok", true);
+        }
         else if (resp.status === 429 || data.error === "rate_limited") setStatus("contact.form.rate", false);
         else if (resp.status === 503 || data.error === "not_configured") setStatus("contact.form.not_configured", false);
         else if (data.error === "bad_phone") setStatus("contact.form.phone_invalid", false);
@@ -325,67 +354,6 @@
     });
   }
 
-  // ============================ HERO ORQA FON: jonli kod =================
-  const CODE_SCRIPT = [
-    { c: "cmt",  text: "# raximboy@ibrohimov-dev:~/portfolio" },
-    { c: "cmd",  text: "$ git commit -m \"ship it\"" },
-    { c: "ok",   text: "✓ main 9f3a2c1 — pushed" },
-    { c: "code", text: "class Developer:" },
-    { c: "code", text: "    name  = \"Raximboy Ibrohimov\"" },
-    { c: "code", text: "    role  = \"Backend & Mobile\"" },
-    { c: "code", text: "    stack = [\"Python\", \"Django\", \"Flutter\"]" },
-    { c: "cmd",  text: "$ python manage.py test" },
-    { c: "out",  text: "running 128 tests..." },
-    { c: "ok",   text: "✓ 128 passed in 2.4s" },
-    { c: "cmd",  text: "$ docker build -t portfolio ." },
-    { c: "out",  text: "building ████████████ 100%" },
-    { c: "ok",   text: "✓ image built in 12.1s" },
-    { c: "cmd",  text: "$ deploy --prod ibrohimov-dev.uz" },
-    { c: "ok",   text: "✓ live · 200 OK · 38ms" },
-    { c: "cmt",  text: "# building something new..." },
-    { c: "code", text: "async def chat(ws):" },
-    { c: "code", text: "    await ws.send(\"hello 👋\")" },
-    { c: "ok",   text: "✓ websocket connected" },
-    { c: "cmt",  text: "# coffee → clean code ☕" },
-  ];
-
-  function initCodeStream() {
-    const host = $("#codeStream");
-    if (!host) return;
-    const ln = (cls, txt, extra) => '<span class="ln ' + cls + '">' + esc(txt) + (extra || "") + "</span>";
-
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      host.innerHTML = CODE_SCRIPT.slice(0, 16).map(l => ln(l.c, l.text)).join("");
-      return;
-    }
-
-    const MAX = 24, CUR = '<span class="cur"></span>';
-    let lines = [], idx = 0;
-    const render = typing => { host.innerHTML = lines.join("") + (typing || ""); };
-
-    function next() {
-      const it = CODE_SCRIPT[idx % CODE_SCRIPT.length]; idx++;
-      const instant = it.c === "out" || it.c === "ok";   // natijalar darrov chiqsin
-      if (instant) {
-        lines.push(ln(it.c, it.text)); if (lines.length > MAX) lines.shift();
-        render(""); setTimeout(next, 480);
-        return;
-      }
-      let ci = 0;
-      (function ch() {
-        ci++;
-        render(ln(it.c, it.text.slice(0, ci), CUR));
-        if (ci >= it.text.length) {
-          lines.push(ln(it.c, it.text)); if (lines.length > MAX) lines.shift();
-          render(""); setTimeout(next, 380);
-        } else {
-          setTimeout(ch, 26 + Math.random() * 42);
-        }
-      })();
-    }
-    next();
-  }
-
   // ============================ START ====================================
   document.addEventListener("DOMContentLoaded", () => {
     // deep-link: ?lang=ru&theme=light
@@ -396,7 +364,6 @@
     applyTheme(theme);
     applyLang(lang);          // renderProjects + startTyping ham chaqiradi
     splitName();
-    initCodeStream();
     initMatrix();
     observeReveals();
     initCounters();

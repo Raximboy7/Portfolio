@@ -72,6 +72,9 @@ const I18N = {
     "contact.form.missing": "Iltimos ism va xabarni to'ldiring.",
     "contact.form.phone_invalid": "⚠ Telefon raqami noto'g'ri. Masalan: +998 90 123 45 67",
     "contact.form.rate": "⚠ Juda ko'p urinish. Birozdan so'ng qayta urinib ko'ring.",
+    "contact.modal.title": "Xabaringiz yuborildi!",
+    "contact.modal.text": "Rahmat! Tez orada siz bilan bog'lanaman.",
+    "contact.modal.close": "Yopish",
 
     "footer.made": "Django & ☕ bilan yaratilgan",
     "footer.back": "Yuqoriga",
@@ -144,6 +147,9 @@ const I18N = {
     "contact.form.missing": "Пожалуйста, заполните имя и сообщение.",
     "contact.form.phone_invalid": "⚠ Неверный номер телефона. Например: +998 90 123 45 67",
     "contact.form.rate": "⚠ Слишком много попыток. Попробуйте чуть позже.",
+    "contact.modal.title": "Сообщение отправлено!",
+    "contact.modal.text": "Спасибо! Я скоро свяжусь с вами.",
+    "contact.modal.close": "Закрыть",
 
     "footer.made": "Сделано с Django & ☕",
     "footer.back": "Наверх",
@@ -216,6 +222,9 @@ const I18N = {
     "contact.form.missing": "Please fill in your name and message.",
     "contact.form.phone_invalid": "⚠ Invalid phone number. Example: +998 90 123 45 67",
     "contact.form.rate": "⚠ Too many attempts. Please try again a bit later.",
+    "contact.modal.title": "Message sent!",
+    "contact.modal.text": "Thank you! I'll get back to you soon.",
+    "contact.modal.close": "Close",
 
     "footer.made": "Built with Django & ☕",
     "footer.back": "Back to top",

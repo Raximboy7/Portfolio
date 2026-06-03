@@ -7,5 +7,6 @@ app_name = "portfolio"
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("aloqa/", views.contact_page, name="contact"),
     path("api/contact/", views.contact_api, name="contact_api"),
 ]

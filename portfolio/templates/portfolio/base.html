@@ -1,0 +1,86 @@
+{% load static %}<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-site-verification" content="_yCItduYyiLx3nJONkw9oB4jcQqGn_Pmx3cc0SXUUVM" />
+  <title>{% block title %}{{ site.name }} — {{ site.role }}{% endblock %}</title>
+
+  <meta name="description" content="{% block description %}Raximboy Ibrohimov — Backend & Mobile dasturchi (Python · Django · Flutter). boss-school.uz, alazizacademy.uz va boshqa loyihalar.{% endblock %}">
+  <meta name="author" content="{{ site.name }}">
+  <meta name="theme-color" content="#0a0a0b">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ site.name }} — {{ site.role }}">
+  <meta property="og:description" content="Backend & Mobile dasturchi · Python · Django · Flutter">
+  <meta property="og:url" content="{{ site.url }}">
+
+  <link rel="icon" type="image/svg+xml" href="{% static 'portfolio/img/favicon.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
+
+  <script>
+    (function () {
+      document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
+      document.documentElement.setAttribute("lang", localStorage.getItem("lang") || "uz");
+    })();
+  </script>
+</head>
+<body>
+
+  <!-- fon effektlari -->
+  <div class="grid-bg" aria-hidden="true"></div>
+  <div class="glow-orb" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="spotlight" aria-hidden="true"></div>
+  <div id="progress" aria-hidden="true"></div>
+
+  <!-- ============================== NAV ============================== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="{% block logo_href %}#hero{% endblock %}" class="logo" aria-label="Bosh sahifa">Raximboy<b>.dev</b><span>_</span></a>
+
+      <div class="nav-links" id="navLinks">
+        {% block nav_links %}
+        <a href="#about" data-i18n="nav.about">Men haqimda</a>
+        <a href="#skills" data-i18n="nav.skills">Ko'nikmalar</a>
+        <a href="#projects" data-i18n="nav.projects">Loyihalar</a>
+        <a href="{% url 'contact' %}" data-i18n="nav.contact">Aloqa</a>
+        {% endblock %}
+      </div>
+
+      <div class="nav-tools">
+        <div class="lang-switch" role="group" aria-label="Til / Язык / Language">
+          <button data-lang="uz" class="active" aria-pressed="true">UZ</button>
+          <button data-lang="ru" aria-pressed="false">RU</button>
+          <button data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Temani almashtirish">
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        </button>
+        <button class="icon-btn burger" id="burger" aria-label="Menyu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="footer">
+    <div class="wrap">
+      <a href="{% block footer_up_href %}#hero{% endblock %}" class="up"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg><span data-i18n="footer.back">Yuqoriga</span></a>
+      <p data-i18n="footer.made">Django &amp; ☕ bilan yaratilgan</p>
+      <p class="mono" style="font-size:12px;color:var(--faint)">© 2026 Raximboy Ibrohimov · ibrohimov-dev.uz</p>
+    </div>
+  </footer>
+
+  <script src="{% static 'portfolio/js/i18n.js' %}"></script>
+  <script src="{% static 'portfolio/js/projects.js' %}"></script>
+  <script src="{% static 'portfolio/js/app.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
