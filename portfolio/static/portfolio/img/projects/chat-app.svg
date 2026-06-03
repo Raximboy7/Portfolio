@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="chat-g" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6366f1"/>
+      <stop offset="1" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+  <path d="M16 8h32a8 8 0 0 1 8 8v20a8 8 0 0 1-8 8H30L17 55a1.4 1.4 0 0 1-2.3-1.1V44h-.7a8 8 0 0 1-8-8V16a8 8 0 0 1 8-8z" fill="url(#chat-g)"/>
+  <circle cx="23" cy="26" r="3.4" fill="#fff"/>
+  <circle cx="32" cy="26" r="3.4" fill="#fff"/>
+  <circle cx="41" cy="26" r="3.4" fill="#fff"/>
+</svg>
