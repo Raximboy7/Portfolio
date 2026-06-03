@@ -82,6 +82,11 @@
     host.innerHTML = window.PROJECTS.map((p, i) => {
       const desc = (p.desc && (p.desc[lang] || p.desc.en)) || "";
       const initials = p.name.split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
+      // Logo URL'lari shablonda {% static %} orqali beriladi (production xesh nomlari uchun).
+      const logo = (window.PROJECT_LOGOS || {})[p.key];
+      const icon = logo
+        ? '<div class="proj-icon has-logo" aria-hidden="true"><img src="' + esc(logo) + '" alt="" loading="lazy"></div>'
+        : '<div class="proj-icon" aria-hidden="true">' + esc(initials) + "</div>";
       const tags = p.stack.map(s => "<span>" + esc(s) + "</span>").join("");
       const link = p.url
         ? '<a class="proj-link" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(t("projects.visit")) + " " + ARROW + "</a>"
@@ -90,7 +95,7 @@
       return (
         '<article class="proj glass reveal ' + delay + '">' +
           '<div class="proj-top">' +
-            '<div class="proj-icon" aria-hidden="true">' + esc(initials) + "</div>" +
+            icon +
             '<span class="proj-status ' + esc(p.status) + '"><span class="sd"></span>' + esc(p.status) + "</span>" +
           "</div>" +
           "<h3>" + esc(p.name) + "</h3>" +

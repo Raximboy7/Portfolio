@@ -1,4 +1,5 @@
 {% extends "portfolio/base.html" %}
+{% load static %}
 
 {% block content %}
   <!-- ============================== HERO ============================= -->
@@ -152,4 +153,14 @@
       <div class="proj-grid" id="projGrid"><!-- app.js PROJECTS dan render qiladi --></div>
     </div>
   </section>
+
+  <!-- Loyiha logolari: static tegi production'da xeshlangan nomlarni to'g'ri beradi -->
+  <script>
+    window.PROJECT_LOGOS = {
+      "boss-school":    "{% static 'portfolio/img/projects/boss-school.png' %}",
+      "alaziz-academy": "{% static 'portfolio/img/projects/alaziz-academy.png' %}",
+      "jibas":          "{% static 'portfolio/img/projects/jibas.png' %}",
+      "portfolio":      "{% static 'portfolio/img/favicon.svg' %}"
+    };
+  </script>
 {% endblock %}
