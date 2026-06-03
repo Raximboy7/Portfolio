@@ -324,12 +324,14 @@
   // ============================ MAGNIT TUGMALAR ==========================
   function initMagnetic() {
     if (!matchMedia("(pointer: fine)").matches) return;
+    const STRENGTH = 0.12, MAX = 5;   // juda yengil magnit: ozgina qimirlaydi (maks ±5px)
+    const clamp = v => Math.max(-MAX, Math.min(MAX, v));
     $$(".btn, .socials a, .icon-btn").forEach(el => {
       el.addEventListener("pointermove", e => {
         const r = el.getBoundingClientRect();
         const mx = e.clientX - (r.left + r.width / 2);
         const my = e.clientY - (r.top + r.height / 2);
-        el.style.transform = "translate(" + (mx * 0.25) + "px," + (my * 0.4) + "px)";
+        el.style.transform = "translate(" + clamp(mx * STRENGTH) + "px," + clamp(my * STRENGTH) + "px)";
       });
       el.addEventListener("pointerleave", () => { el.style.transform = ""; });
     });
