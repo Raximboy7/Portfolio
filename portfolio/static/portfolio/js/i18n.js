@@ -47,6 +47,9 @@ const I18N = {
     "projects.kicker": "03 — Ishlarim",
     "projects.title": "Loyihalar",
     "projects.subtitle": "Men yaratgan va ishtirok etgan loyihalar",
+    "projects.filter_all": "Hammasi", "projects.filter_web": "Saytlar", "projects.filter_app": "Mobil ilovalar", "projects.count": "ta loyiha",
+    "projects.private": "Ichki ilova (Android · iOS)", "projects.status_production": "ishlab turibdi", "projects.status_live": "jonli", "projects.status_in_progress": "jarayonda",
+    "sites.label": "Mening saytlarim",
     "projects.visit": "Saytni ochish",
     "projects.soon": "Tez orada",
 
@@ -122,6 +125,9 @@ const I18N = {
     "projects.kicker": "03 — Работы",
     "projects.title": "Проекты",
     "projects.subtitle": "Проекты, которые я создал и в которых участвовал",
+    "projects.filter_all": "Все", "projects.filter_web": "Сайты", "projects.filter_app": "Мобильные приложения", "projects.count": "проектов",
+    "projects.private": "Внутреннее приложение (Android · iOS)", "projects.status_production": "в работе", "projects.status_live": "онлайн", "projects.status_in_progress": "в разработке",
+    "sites.label": "Мои сайты",
     "projects.visit": "Открыть сайт",
     "projects.soon": "Скоро",
 
@@ -197,6 +203,9 @@ const I18N = {
     "projects.kicker": "03 — Work",
     "projects.title": "Projects",
     "projects.subtitle": "Projects I built and contributed to",
+    "projects.filter_all": "All", "projects.filter_web": "Websites", "projects.filter_app": "Mobile apps", "projects.count": "projects",
+    "projects.private": "Internal app (Android · iOS)", "projects.status_production": "production", "projects.status_live": "live", "projects.status_in_progress": "in progress",
+    "sites.label": "My websites",
     "projects.visit": "Visit site",
     "projects.soon": "Soon",
 

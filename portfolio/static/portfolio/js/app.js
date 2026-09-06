@@ -36,6 +36,7 @@
       b.setAttribute("aria-pressed", on ? "true" : "false");
     });
 
+    bindProjFilters();
     renderProjects();
     startTyping();
   }
@@ -76,39 +77,54 @@
   // ============================ PROJECTS ==================================
   const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
 
+  let projFilter = "all";
+  const PHONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>';
+  const GLOBE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>';
+
   function renderProjects() {
     const host = $("#projGrid");
     if (!host || !window.PROJECTS) return;
-    host.innerHTML = window.PROJECTS.map((p, i) => {
+    const list = window.PROJECTS.filter(p => projFilter === "all" || (p.kind || "web") === projFilter);
+    host.innerHTML = list.map((p, i) => {
       const desc = (p.desc && (p.desc[lang] || p.desc.en)) || "";
       const initials = p.name.split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
-      // Logo URL'lari shablonda {% static %} orqali beriladi (production xesh nomlari uchun).
       const logo = (window.PROJECT_LOGOS || {})[p.key];
       const icon = logo
         ? '<div class="proj-icon has-logo" aria-hidden="true"><img src="' + esc(logo) + '" alt="" loading="lazy"></div>'
         : '<div class="proj-icon" aria-hidden="true">' + esc(initials) + "</div>";
+      const kind = (p.kind || "web") === "app" ? "app" : "web";
       const tags = p.stack.map(s => "<span>" + esc(s) + "</span>").join("");
-      const link = p.url
-        ? '<a class="proj-link" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(t("projects.visit")) + " " + ARROW + "</a>"
-        : '<span class="proj-link disabled">' + esc(t("projects.soon")) + "</span>";
+      const plats = (p.platforms || []).map(x => "<span>" + esc(x) + "</span>").join("");
+      let link;
+      if (p.url) link = '<a class="proj-link" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(t("projects.visit")) + " " + ARROW + "</a>";
+      else if (p.status === "in-progress") link = '<span class="proj-link disabled">' + esc(t("projects.soon")) + "</span>";
+      else link = '<span class="proj-link disabled">' + esc(t("projects.private")) + "</span>";
       const delay = "d" + ((i % 3) + 1);
       return (
-        '<article class="proj glass reveal ' + delay + '">' +
+        '<article class="proj glass reveal ' + delay + ' kind-' + kind + '" data-kind="' + kind + '">' +
           '<div class="proj-top">' +
             icon +
-            '<span class="proj-status ' + esc(p.status) + '"><span class="sd"></span>' + esc(p.status) + "</span>" +
+            '<span class="proj-status ' + esc(p.status) + '"><span class="sd"></span>' + esc(t("projects.status_" + p.status.replace("-", "_"))) + "</span>" +
           "</div>" +
+          '<div class="proj-kind">' + (kind === "app" ? PHONE : GLOBE) + "<span>" + esc(p.type) + " · " + p.year + "</span></div>" +
           "<h3>" + esc(p.name) + "</h3>" +
-          '<div class="ptype">' + esc(p.type) + " · " + p.year + "</div>" +
           "<p>" + esc(desc) + "</p>" +
           '<div class="tags">' + tags + "</div>" +
-          link +
+          '<div class="proj-foot">' + link + '<div class="plats">' + plats + "</div></div>" +
         "</article>"
       );
     }).join("");
-
+    $$("[data-proj-filter]").forEach(b => b.classList.toggle("on", b.getAttribute("data-proj-filter") === projFilter));
+    const cnt = $("#projCount"); if (cnt) cnt.textContent = list.length;
     observeReveals(host);
     bindProjGlow(host);
+  }
+
+  function bindProjFilters() {
+    $$("[data-proj-filter]").forEach(b => b.addEventListener("click", () => {
+      projFilter = b.getAttribute("data-proj-filter") || "all";
+      renderProjects();
+    }));
   }
 
   function bindProjGlow(host) {
@@ -196,43 +212,56 @@
     const canvas = $("#matrix"), hero = $("#hero");
     if (!canvas || !hero) return;
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const ctx = canvas.getContext("2d");
-    const DIGITS = "0123456789".split("");
-    const FS = 18;
-    let W = 0, H = 0, cols = 0, drops = [];
+    const ctx = canvas.getContext("2d", { alpha: true });
+    const DIGITS = "0123456789";
+    const FS = 18;               // ustun kengligi / shrift
+    const FPS = 24;              // animatsiya kadr tezligi (60 emas)
+    const STEP_MS = 1000 / FPS;
+    let W = 0, H = 0, cols = 0, drops = [], speeds = [];
     function resize() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      // dpr 1 — canvas hajmi 4 barobar kichik, ko'z bilan farq sezilmaydi
       W = hero.clientWidth; H = hero.clientHeight;
-      canvas.width = W * dpr; canvas.height = H * dpr;
+      canvas.width = W; canvas.height = H;
       canvas.style.width = W + "px"; canvas.style.height = H + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.font = FS + "px 'JetBrains Mono', ui-monospace, monospace";
+      ctx.textBaseline = "top";
       cols = Math.ceil(W / FS);
-      // boshidanoq butun ekran bo'ylab tarqalgan bo'lsin (darrov ko'rinadi)
-      drops = new Array(cols).fill(0).map(() => Math.floor(Math.random() * (H / FS)));
+      drops = Array.from({ length: cols }, () => Math.random() * (H / FS));
+      speeds = Array.from({ length: cols }, () => 0.35 + Math.random() * 0.5); // har ustun o'z tezligida
+      ctx.clearRect(0, 0, W, H);
     }
     resize();
-    window.addEventListener("resize", resize);
-    let frame = 0;
-    const STEP = 6;   // har 6-kadrda bir qator pastga (avvalgi tezlik)
-    function loop() {
-      // izlarni asta o'chirib boramiz (silliq, uzun quyruq)
+    let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
+
+    let running = false, last = 0, rafId = 0;
+    function draw(now) {
+      if (!running) return;
+      rafId = requestAnimationFrame(draw);
+      if (now - last < STEP_MS) return;      // 24 fps ga cheklash
+      last = now;
+      // qisqa quyruq: har kadrda izlarni tezroq o'chiramiz (ustma-ust raqamlar qolmaydi)
       ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = "rgba(0,0,0,0.04)";
+      ctx.fillStyle = "rgba(0,0,0,0.22)";
       ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = "source-over";
-      if (frame++ % STEP === 0) {
-        const light = document.documentElement.getAttribute("data-theme") === "light";
-        ctx.fillStyle = light ? "rgba(10,10,11,0.85)" : "rgba(255,255,255,0.92)";
-        ctx.font = FS + "px 'JetBrains Mono', monospace";
-        for (let i = 0; i < cols; i++) {
-          ctx.fillText(DIGITS[(Math.random() * DIGITS.length) | 0], i * FS, drops[i] * FS);
-          if (drops[i] * FS > H && Math.random() > 0.95) drops[i] = 0;
-          drops[i]++;   // bir qator pastga
+      const light = document.documentElement.getAttribute("data-theme") === "light";
+      ctx.fillStyle = light ? "rgba(10,10,11,0.85)" : "rgba(255,255,255,0.9)";
+      for (let i = 0; i < cols; i++) {
+        drops[i] += speeds[i];
+        const y = Math.floor(drops[i]) * FS;
+        if (((drops[i] - speeds[i]) | 0) !== (drops[i] | 0)) {   // faqat yangi katakka o'tganda chizamiz
+          ctx.fillText(DIGITS[(Math.random() * 10) | 0], i * FS, y);
         }
+        if (y > H + FS * 4) drops[i] = -Math.random() * 20;   // tepadan qayta boshlaydi
       }
-      requestAnimationFrame(loop);
     }
-    loop();
+    function start() { if (running) return; running = true; last = 0; rafId = requestAnimationFrame(draw); }
+    function stop() { running = false; cancelAnimationFrame(rafId); }
+    // Hero ko'rinmasa yoki tab yashirin bo'lsa — to'xtaydi (CPU/GPU tejaladi)
+    const io = new IntersectionObserver(en => { en[0].isIntersecting && !document.hidden ? start() : stop(); }, { threshold: 0.05 });
+    io.observe(hero);
+    document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
   }
 
   // ============================ BURGER (mobil) ===========================

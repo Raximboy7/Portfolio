@@ -47,17 +47,17 @@
         </div>
       </div>
 
-      <!-- dekorativ kod kartasi -->
-      <div class="hero-card reveal d3" id="heroCard" aria-hidden="true">
-        <div class="hc-dots"><i></i><i></i><i></i></div>
-<pre><span class="k">const</span> dev = {
-  name:      <span class="s">"Raximboy"</span>,
-  role:      <span class="s">"Software Dev"</span>,
-  stack:     [<span class="s">"Django"</span>, <span class="s">"Flutter"</span>],
-  location:  <span class="s">"Tashkent 🇺🇿"</span>,
-  coffee:    <span class="p">Infinity</span>,
-  available: <span class="p">true</span>,
-}</pre>
+      <!-- Dumaloq rasm (kod chip bilan) -->
+      <div class="hero-photo reveal d3" id="heroCard">
+        <div class="hp-ring">
+          <img src="{% static 'portfolio/img/avatar.jpg' %}" alt="Raximboy Ibrohimov" width="260" height="260" loading="eager" decoding="async" fetchpriority="high">
+        </div>
+        <span class="hp-dot" aria-hidden="true"></span>
+        <div class="hp-code" aria-hidden="true"><span class="k">const</span> dev = { available: <span class="p">true</span> }</div>
+        <div class="hp-tag">
+          <b>Raximboy Ibrohimov</b>
+          <small>Backend &amp; Mobile · Django · Flutter · Tashkent 🇺🇿</small>
+        </div>
       </div>
     </div>
 
@@ -75,6 +75,22 @@
     </div>
   </div>
 
+  <!-- ========================= SAYTLAR (logolar) ========================= -->
+  <div class="sites-strip" aria-label="Saytlarim">
+    <div class="wrap sites-inner">
+      <span class="sites-label mono" data-i18n="sites.label">Mening saytlarim</span>
+      <div class="sites-row">
+        <a href="https://boss-school.uz" target="_blank" rel="noopener" class="site-pill"><img src="{% static 'portfolio/img/projects/boss-school.png' %}" alt=""><span>boss-school.uz</span></a>
+        <a href="https://alazizacademy.uz" target="_blank" rel="noopener" class="site-pill"><img src="{% static 'portfolio/img/projects/alaziz-academy.png' %}" alt=""><span>alazizacademy.uz</span></a>
+        <a href="https://jibas.uz" target="_blank" rel="noopener" class="site-pill"><img src="{% static 'portfolio/img/projects/jibas.png' %}" alt=""><span>jibas.uz</span></a>
+        <a href="https://devnest.uz" target="_blank" rel="noopener" class="site-pill"><img src="{% static 'portfolio/img/projects/devnest.svg' %}" alt=""><span>devnest.uz</span></a>
+        <a href="https://bozorlink.uz" target="_blank" rel="noopener" class="site-pill"><img src="{% static 'portfolio/img/projects/bozorlink.svg' %}" alt=""><span>bozorlink.uz</span></a>
+        <a href="https://nevio.uz" target="_blank" rel="noopener" class="site-pill"><img src="{% static 'portfolio/img/projects/nevio.png' %}" alt=""><span>nevio.uz</span></a>
+        <a href="https://sillage-parfyum.uz" target="_blank" rel="noopener" class="site-pill"><img src="{% static 'portfolio/img/projects/sillage.svg' %}" alt=""><span>sillage-parfyum.uz</span></a>
+        <a href="https://mirakbar.uz" target="_blank" rel="noopener" class="site-pill"><img src="{% static 'portfolio/img/projects/mirakbar.png' %}" alt=""><span>mirakbar.uz</span></a>
+      </div>
+    </div>
+  </div>
   <!-- ============================= ABOUT ============================= -->
   <section id="about">
     <div class="wrap">
@@ -88,7 +104,7 @@
           <p class="mono" style="color:var(--brand-2)" data-i18n="about.fun_fact">Men qahvani toza kodga aylantiraman ☕</p>
 
           <div class="stats">
-            <div class="stat glass reveal d1"><div class="num" data-count="5">0</div><div class="lbl" data-i18n="about.stat_projects">Loyiha</div></div>
+            <div class="stat glass reveal d1"><div class="num" data-count="9">0</div><div class="lbl" data-i18n="about.stat_projects">Loyiha</div></div>
             <div class="stat glass reveal d2"><div class="num" data-count="10">0</div><div class="lbl" data-i18n="about.stat_years">Yil tajriba</div></div>
             <div class="stat glass reveal d3"><div class="num" data-count="10">0</div><div class="lbl" data-i18n="about.stat_apps">Mobil ilova</div></div>
           </div>
@@ -150,6 +166,12 @@
       <div class="kicker reveal" data-i18n="projects.kicker">03 — Ishlarim</div>
       <h2 class="section-title reveal" data-i18n="projects.title">Loyihalar</h2>
       <p class="section-sub reveal d1" data-i18n="projects.subtitle">Men yaratgan va ishtirok etgan loyihalar</p>
+      <div class="proj-filters reveal d1" role="tablist">
+        <button type="button" data-proj-filter="all" class="on"><span data-i18n="projects.filter_all">Hammasi</span></button>
+        <button type="button" data-proj-filter="web"><span data-i18n="projects.filter_web">Saytlar</span></button>
+        <button type="button" data-proj-filter="app"><span data-i18n="projects.filter_app">Mobil ilovalar</span></button>
+        <span class="proj-count mono"><b id="projCount">0</b> <span data-i18n="projects.count">ta loyiha</span></span>
+      </div>
       <div class="proj-grid" id="projGrid"><!-- app.js PROJECTS dan render qiladi --></div>
     </div>
   </section>
@@ -160,8 +182,17 @@
       "boss-school":    "{% static 'portfolio/img/projects/boss-school.png' %}",
       "alaziz-academy": "{% static 'portfolio/img/projects/alaziz-academy.png' %}",
       "jibas":          "{% static 'portfolio/img/projects/jibas.png' %}",
-      "chat-app":       "{% static 'portfolio/img/projects/chat-app.svg' %}",
-      "portfolio":      "{% static 'portfolio/img/favicon.svg' %}"
+      "devnest":        "{% static 'portfolio/img/projects/devnest.svg' %}",
+      "bozorlink":      "{% static 'portfolio/img/projects/bozorlink.svg' %}",
+      "nevio":          "{% static 'portfolio/img/projects/nevio.png' %}",
+      "sillage":        "{% static 'portfolio/img/projects/sillage.svg' %}",
+      "mirakbar":       "{% static 'portfolio/img/projects/mirakbar.png' %}",
+      "portfolio":      "{% static 'portfolio/img/favicon.svg' %}",
+      "boss-student":   "{% static 'portfolio/img/projects/boss-student.png' %}",
+      "boss-teacher":   "{% static 'portfolio/img/projects/boss-teacher.png' %}",
+      "boss-parent":    "{% static 'portfolio/img/projects/boss-parent.png' %}",
+      "aziz-teacher":   "{% static 'portfolio/img/projects/aziz-teacher.png' %}",
+      "chat-app":       "{% static 'portfolio/img/projects/chat-app.svg' %}"
     };
   </script>
 {% endblock %}

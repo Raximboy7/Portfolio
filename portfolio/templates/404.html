@@ -1,0 +1,49 @@
+{% extends "portfolio/base.html" %}
+{% load static %}
+{% block title %}404 — Sahifa topilmadi · {{ site.name }}{% endblock %}
+{% block description %}Sahifa topilmadi{% endblock %}
+{% block logo_href %}/{% endblock %}
+{% block nav_links %}
+<a href="/#about" data-i18n="nav.about">Men haqimda</a>
+<a href="/#projects" data-i18n="nav.projects">Loyihalar</a>
+<a href="{% url 'contact' %}" data-i18n="nav.contact">Aloqa</a>
+{% endblock %}
+{% block footer_up_href %}/{% endblock %}
+{% block content %}
+<style>
+  .err-wrap{min-height:calc(100vh - 220px);display:grid;place-items:center;padding:6rem 1.25rem 4rem;position:relative;z-index:1}
+  .err-card{width:min(600px,100%);text-align:center;background:var(--card);border:1px solid var(--card-border);border-radius:20px;padding:2.8rem 1.8rem;backdrop-filter:blur(6px)}
+  .err-icon{width:80px;height:80px;margin:0 auto 1rem;border-radius:22px;display:grid;place-items:center;background:var(--card-hover);border:1px solid var(--card-border);color:var(--text)}
+  .err-badge{display:inline-block;font:600 .72rem 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);border:1px solid var(--card-border);border-radius:999px;padding:.25rem .7rem;margin-bottom:.8rem}
+  .err-code{font:800 5rem/1 'Sora',Inter,sans-serif;letter-spacing:-.05em;color:var(--text)}
+  .err-card h1{font:700 1.5rem/1.3 'Sora',Inter,sans-serif;margin:.5rem 0 .4rem}
+  .err-card p{color:var(--muted);margin:0 auto 1rem;max-width:420px}
+  .err-path{display:inline-block;font:.8rem 'JetBrains Mono',ui-monospace,monospace;color:var(--muted);background:var(--bg-soft);border:1px solid var(--card-border);border-radius:8px;padding:.3rem .6rem;margin-bottom:1.5rem;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .err-actions{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+  .err-btn{display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.25rem;border-radius:12px;font:600 .95rem Inter,sans-serif;border:1px solid var(--card-border);color:var(--text);background:transparent;cursor:pointer;text-decoration:none}
+  .err-btn svg{width:18px;height:18px}
+  .err-btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+  .err-links{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;margin-top:1.4rem;font-size:.9rem}
+  .err-links a{color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:.35rem}
+  .err-links a:hover{color:var(--text)}
+  .err-links svg{width:14px;height:14px}
+</style>
+<section class="err-wrap">
+  <div class="err-card">
+    <div class="err-icon"><svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3l4 4 4-4M4 10h16M4 14h16M8 21l4-4 4 4"/></svg></div>
+    <span class="err-badge">404 · not found</span>
+    <div class="err-code">404</div>
+    <h1>Sahifa topilmadi</h1>
+    <p>Bu manzil mavjud emas yoki ko'chirilgan. Bosh sahifadan davom eting.</p>
+    <code class="err-path">{{ request.path }}</code>
+    <div class="err-actions">
+      <a class="err-btn primary" href="/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8v9a2 2 0 0 1-2 2h-4v-6H9v6H5a2 2 0 0 1-2-2z"/></svg>Bosh sahifa</a>
+      <button class="err-btn" type="button" onclick="history.length > 1 ? history.back() : (location.href='/')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Orqaga</button>
+    </div>
+    <div class="err-links">
+      <a href="/#projects"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M3 9h18"/></svg>Loyihalar</a>
+      <a href="{% url 'contact' %}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 7l8 6 8-6"/></svg>Aloqa</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
