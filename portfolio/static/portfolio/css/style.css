@@ -211,9 +211,11 @@ section { position: relative; padding: clamp(72px, 12vh, 140px) 0; z-index: 1; }
 .hero h1 .name { display: block; background: var(--name-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
 /* harf-harf reveal (o'zi ishga tushadigan animatsiya).
    Gradient har bir harfga alohida qo'llanadi — transform bilan ishlashi uchun. */
+.hero .name:not(.fonts-ready) { visibility: hidden; }   /* shrift kelguncha fallback ko'rinmasin */
 .name .ch {
   display: inline-block; opacity: 0; transform: translateY(1.1em);
-  background: var(--name-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
+  background: var(--name-grad); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+  will-change: transform, opacity; backface-visibility: hidden;
   animation: chIn .7s cubic-bezier(.2,.8,.2,1) both;
 }
 @keyframes chIn { to { opacity: 1; transform: none; } }

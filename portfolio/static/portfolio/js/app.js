@@ -371,6 +371,13 @@
     const el = $(".hero .name");
     if (!el || el.dataset.split) return;
     el.dataset.split = "1";
+    // Sora shrifti yuklanguncha kutamiz — aks holda harflar fallback shriftda chiqib, keyin "sakrab" almashardi
+    const ready = (document.fonts && document.fonts.load)
+      ? Promise.race([document.fonts.load("800 1em Sora"), new Promise(r => setTimeout(r, 1500))])
+      : Promise.resolve();
+    ready.then(() => { el.classList.add("fonts-ready"); splitNameNow(el); });
+  }
+  function splitNameNow(el) {
     const words = el.textContent.trim().split(/\s+/);
     el.textContent = "";
     let i = 0;
