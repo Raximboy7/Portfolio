@@ -486,5 +486,5 @@ section { position: relative; padding: clamp(72px, 12vh, 140px) 0; z-index: 1; }
 .hp-tag { margin-top: 18px; padding: 12px 16px; border-radius: 16px; background: var(--card); border: 1px solid var(--card-border); -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); }
 .hp-tag b { display: block; font-family: "Sora", sans-serif; font-size: 15px; color: var(--text); }
 .hp-tag small { display: block; color: var(--muted); font-size: 12px; margin-top: 3px; white-space: nowrap; }
-@media (max-width: 900px) { .hero-photo { margin: 0 auto; width: min(300px, 82vw); } .hp-ring { width: 220px; height: 220px; } .hp-dot { top: 184px; right: calc(50% - 96px); } .hp-code { left: 0; top: -12px; } }
+@media (max-width: 900px) { .hero-photo { margin: 0 auto; width: min(300px, 82vw); } .hp-ring { width: 220px; height: 220px; } .hp-dot { top: 184px; right: calc(50% - 96px); }  }
 @media (prefers-reduced-motion: reduce) { .hp-ring, .hp-ring img { animation: none; } }
