@@ -368,33 +368,10 @@
 
   // ============================ ISM: harf-harf reveal ====================
   function splitName() {
+    // Harf-harf animatsiya olib tashlandi: gradientli matn transform bilan chizilganda
+    // birinchi harf ("R") xira/kesik ko'rinardi. Ism yaxlit, h1 ning .reveal animatsiyasi bilan chiqadi.
     const el = $(".hero .name");
-    if (!el || el.dataset.split) return;
-    el.dataset.split = "1";
-    // Sora shrifti yuklanguncha kutamiz — aks holda harflar fallback shriftda chiqib, keyin "sakrab" almashardi
-    const ready = (document.fonts && document.fonts.load)
-      ? Promise.race([document.fonts.load("800 1em Sora"), new Promise(r => setTimeout(r, 1500))])
-      : Promise.resolve();
-    ready.then(() => { el.classList.add("fonts-ready"); splitNameNow(el); });
-  }
-  function splitNameNow(el) {
-    const words = el.textContent.trim().split(/\s+/);
-    el.textContent = "";
-    let i = 0;
-    words.forEach((word, wi) => {
-      // har bir so'z yaxlit (white-space:nowrap) — familiya o'rtasidan bo'linmaydi
-      const w = document.createElement("span");
-      w.className = "word";
-      for (const ch of word) {
-        const sp = document.createElement("span");
-        sp.className = "ch"; sp.textContent = ch;
-        sp.style.animationDelay = (0.2 + i * 0.045) + "s";
-        w.appendChild(sp); i++;
-      }
-      el.appendChild(w);
-      // so'zlar orasiga haqiqiy probel (faqat shu yerda qator uzilishi mumkin)
-      if (wi < words.length - 1) { el.appendChild(document.createTextNode(" ")); i++; }
-    });
+    if (el) el.classList.add("fonts-ready");
   }
 
   // ============================ START ====================================

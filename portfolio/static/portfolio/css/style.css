@@ -208,10 +208,9 @@ section { position: relative; padding: clamp(72px, 12vh, 140px) 0; z-index: 1; }
 
 .hero h1 { font-family: "Sora", sans-serif; font-weight: 800; letter-spacing: -.04em; font-size: clamp(44px, 9vw, 96px); line-height: 0.98; margin-bottom: 10px; }
 .hero h1 .greet { display: block; font-family: "JetBrains Mono", monospace; font-size: clamp(13px, 2vw, 16px); font-weight: 400; color: var(--faint); letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
-.hero h1 .name { display: block; background: var(--name-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.hero h1 .name { display: block; background: var(--name-grad); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; padding-right: .06em; }
 /* harf-harf reveal (o'zi ishga tushadigan animatsiya).
    Gradient har bir harfga alohida qo'llanadi — transform bilan ishlashi uchun. */
-.hero .name:not(.fonts-ready) { visibility: hidden; }   /* shrift kelguncha fallback ko'rinmasin */
 .name .ch {
   display: inline-block; opacity: 0; transform: translateY(1.1em);
   background: var(--name-grad); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
