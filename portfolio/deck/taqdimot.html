@@ -2135,6 +2135,8 @@ if(EMBED){
   window.addEventListener('message',function(e){if(e.origin!==location.origin&&!(location.protocol==='file:'&&e.origin==='null'))return;var d=e.data||{};if(d.deck==='pause'){pP=true;sync();}else if(d.deck==='play'){pP=false;sync();}});
   document.addEventListener('visibilitychange',function(){pH=document.hidden;sync();});
   apNext();
+  /* bosh sahifaga: taqdimot tayyor (tashqi rasmlar yuklanishini kutmasdan ko'rsatish uchun) */
+  try{if(window.parent!==window)parent.postMessage({deck:'ready'},location.protocol==='file:'?'*':location.origin);}catch(err){}
 }
 
 })();

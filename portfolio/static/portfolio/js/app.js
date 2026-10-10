@@ -381,7 +381,7 @@
   }
 
   // ============================ HERO: JONLI TAQDIMOT =====================
-  // iframe sahifa to'liq yuklangach ulanadi (LCP ga xalaqit bermaydi); ko'rinmay
+  // iframe DOM tayyor bo'lgach bo'sh vaqtda ulanadi (LCP ga xalaqit bermaydi); ko'rinmay
   // qolganda taqdimotga "pause" yuboriladi, CPU bekorga ishlamaydi.
   function initHeroDeck() {
     const f = $("#heroDeck");
@@ -393,10 +393,13 @@
     if (reduce) src = src.replace(/autoplay=\d+/, "autoplay=0");
     let visible = true, ready = false;
     const send = () => { if (ready && f.contentWindow) f.contentWindow.postMessage({ deck: visible ? "play" : "pause" }, location.origin); };
-    f.addEventListener("load", () => { ready = true; f.classList.add("on"); send(); });
+    const reveal = () => { if (ready) return; ready = true; f.classList.add("on"); send(); };
+    // taqdimot o'zi "ready" yuboradi (DOM tayyor); "load" esa tashqi rasmlarni ham kutadi, zaxira sifatida qoladi
+    window.addEventListener("message", e => { if (e.source === f.contentWindow && e.data && e.data.deck === "ready") reveal(); });
+    f.addEventListener("load", reveal);
     const go = () => { f.src = src; };
-    const start = () => ("requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 2500 }) : setTimeout(go, 600));
-    if (document.readyState === "complete") start(); else window.addEventListener("load", start, { once: true });
+    // DOM tayyor bo'lgach bo'sh vaqtda (ko'pi bilan 1.2s): sekin shrift/rasmlar "load"ni kechiktirsa ham kutmaydi
+    if ("requestIdleCallback" in window) requestIdleCallback(go, { timeout: 1200 }); else setTimeout(go, 400);
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(es => { visible = es[0].isIntersecting; send(); }, { threshold: 0.05 }).observe(f);
     }
