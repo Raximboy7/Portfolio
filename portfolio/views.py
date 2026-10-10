@@ -70,10 +70,10 @@ def _client_ip(request):
     return request.META.get("REMOTE_ADDR", "unknown")
 
 
-def _home_news(limit=6):
-    """Bosh sahifa uchun: eng yangi xabarlar, o'zbekchalari bo'lsa ulardan 2 tasi albatta."""
+def _home_news(limit=3):
+    """Bosh sahifa uchun: eng yangi xabarlar, o'zbekchasi bo'lsa bittasi albatta."""
     items = news.latest(60)
-    uz = [i for i in items if i["region"] == "uz"][:2]
+    uz = [i for i in items if i["region"] == "uz"][:1]
     world = [i for i in items if i["region"] != "uz"][: limit - len(uz)]
     return sorted(uz + world, key=lambda i: i["published"], reverse=True)
 

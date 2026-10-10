@@ -4,68 +4,57 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="_yCItduYyiLx3nJONkw9oB4jcQqGn_Pmx3cc0SXUUVM" />
-  <title>{% block title %}{{ site.name }} · Full-stack dasturchi va AI qo'llanmalar{% endblock %}</title>
+  <title>{% block title %}{{ site.name }} · Dasturchi va AI{% endblock %}</title>
 
-  <meta name="description" content="{% block description %}Raximboy Ibrohimov: full-stack dasturchi (Python · Django · Flutter). AI bo'yicha taqdimot, amaliy qo'llanmalar, AI yangiliklari va loyihalar.{% endblock %}">
+  <meta name="description" content="{% block description %}Raximboy Ibrohimov: full-stack dasturchi. Python, Django, Flutter va AI agentlar. Loyihalar, AI qo'llanmalar, taqdimot va AI yangiliklari.{% endblock %}">
   <meta name="author" content="{{ site.name }}">
-  <meta name="theme-color" content="#070b19">
+  <meta name="theme-color" content="#101311">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="{% block og_title %}{{ site.name }} · Full-stack dasturchi va AI qo'llanmalar{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}{{ site.name }} · Dasturchi va AI{% endblock %}">
   <meta property="og:description" content="{% block og_description %}Full-stack dasturchi · Python · Django · Flutter · AI agentlar{% endblock %}">
   <meta property="og:url" content="{{ site.url }}{{ request.path }}">
   {% block extra_head %}{% endblock %}
   <meta property="og:image" content="{{ site.url }}{% static 'portfolio/img/avatar.jpg' %}">
 
   <link rel="icon" type="image/svg+xml" href="{% static 'portfolio/img/favicon.svg' %}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Manrope:wght@400..800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
 
   <script>
     (function () {
-      document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
-      document.documentElement.setAttribute("lang", localStorage.getItem("lang") || "uz");
+      try {
+        document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
+        document.documentElement.setAttribute("lang", localStorage.getItem("lang") || "uz");
+      } catch (e) {}
     })();
   </script>
 </head>
 <body id="top" data-page="{{ page|default:'' }}">
 
-  <!-- fon effektlari -->
-  <div class="grid-bg" aria-hidden="true"></div>
-  <div class="glow-orb" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
-  <div id="spotlight" aria-hidden="true"></div>
-  <div id="progress" aria-hidden="true"></div>
-
   <!-- ============================== NAV ============================== -->
-  <nav class="nav" id="nav">
-    <div class="nav-inner">
-      <a href="{% block logo_href %}{% if page == 'home' %}#hero{% else %}{% url 'index' %}{% endif %}{% endblock %}" class="logo" aria-label="Bosh sahifa">Raximboy<b>.dev</b><span>_</span></a>
+  <nav class="site-nav" aria-label="Asosiy menyu">
+    <div class="wrap nav">
+      <a class="logo" href="{% if page == 'home' %}#top{% else %}{% url 'index' %}{% endif %}" aria-label="Bosh sahifa">Raximboy<b>.dev</b><span>_</span></a>
 
-      <div class="nav-links" id="navLinks">
+      <div class="links" id="navLinks">
         {% block nav_links %}
         <a href="{% if page != 'home' %}{% url 'index' %}{% endif %}#about" data-i18n="nav.about">Men haqimda</a>
         <a href="{% if page != 'home' %}{% url 'index' %}{% endif %}#projects" data-i18n="nav.projects">Loyihalar</a>
-        <a href="{% url 'guides' %}"{% if page == 'guides' %} class="active" aria-current="page"{% endif %} data-i18n="nav.guides">AI qo'llanmalar</a>
-        <a href="{% url 'news' %}"{% if page == 'news' %} class="active" aria-current="page"{% endif %} data-i18n="nav.news">AI yangiliklar</a>
-        <a href="{% url 'contact' %}"{% if page == 'contact' %} class="active" aria-current="page"{% endif %} data-i18n="nav.contact">Aloqa</a>
+        <a href="{% if page == 'home' %}#ai{% else %}{% url 'guides' %}{% endif %}"{% if page == 'guides' %} class="active" aria-current="page"{% endif %} data-i18n="nav.guides">AI qo'llanmalar</a>
+        <a href="{% url 'news' %}"{% if page == 'news' %} class="active" aria-current="page"{% endif %}><span data-i18n="nav.news">AI yangiliklar</span> ↗</a>
+        <a href="{% url 'contact' %}" class="nav-contact{% if page == 'contact' %} active{% endif %}"{% if page == 'contact' %} aria-current="page"{% endif %} data-i18n="nav.contact">Aloqa</a>
         {% endblock %}
+        <div class="lang-switch" role="group" aria-label="Til / Язык / Language">
+          <button type="button" data-lang="uz">UZ</button><button type="button" data-lang="ru">RU</button><button type="button" data-lang="en">EN</button>
+        </div>
       </div>
 
-      <div class="nav-tools">
+      <div class="nav-right">
+        <a class="small-link" href="{% if page == 'home' %}#contact{% else %}{% url 'contact' %}{% endif %}"><span data-i18n="nav.talk">Bog'lanish</span> ↗</a>
         <div class="lang-switch" role="group" aria-label="Til / Язык / Language">
-          <button data-lang="uz" class="active" aria-pressed="true">UZ</button>
-          <button data-lang="ru" aria-pressed="false">RU</button>
-          <button data-lang="en" aria-pressed="false">EN</button>
+          <button type="button" data-lang="uz" class="active" aria-pressed="true">UZ</button><button type="button" data-lang="ru" aria-pressed="false">RU</button><button type="button" data-lang="en" aria-pressed="false">EN</button>
         </div>
-        <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Temani almashtirish">
-          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/></svg>
-          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
-        </button>
-        <button class="icon-btn burger" id="burger" aria-label="Menyu" aria-expanded="false">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-        </button>
+        <button type="button" class="theme" id="themeToggle" data-i18n-aria="ui.theme" aria-label="Rang rejimini almashtirish">◐</button>
+        <button type="button" class="menu" id="burger" data-i18n-aria="ui.menu" aria-label="Menyu" aria-expanded="false" aria-controls="navLinks">☰</button>
       </div>
     </div>
   </nav>
@@ -73,11 +62,15 @@
   {% block content %}{% endblock %}
 
   <!-- ============================ FOOTER ============================ -->
-  <footer class="footer">
-    <div class="wrap">
-      <a href="{% block footer_up_href %}#top{% endblock %}" class="up"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg><span data-i18n="footer.back">Yuqoriga</span></a>
-      <p data-i18n="footer.made">Django &amp; ☕ bilan yaratilgan</p>
-      <p class="mono" style="font-size:12px;color:var(--faint)">© 2026 Raximboy Ibrohimov · ibrohimov-dev.uz</p>
+  <footer class="site-footer">
+    <div class="wrap footer">
+      <span>© 2026 Raximboy Ibrohimov · ibrohimov-dev.uz</span>
+      <div>
+        <a href="{{ site.github }}" target="_blank" rel="noopener">GitHub ↗</a>
+        <a href="{{ site.linkedin }}" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="{{ site.telegram }}" target="_blank" rel="noopener">Telegram ↗</a>
+        <a href="#top"><span data-i18n="footer.back">Yuqoriga</span> ↑</a>
+      </div>
     </div>
   </footer>
 

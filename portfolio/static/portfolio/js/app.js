@@ -1,7 +1,8 @@
 /* =============================================================================
-   app.js: interaktivlik (i18n, tema, typing, scroll-reveal, projects,
-   count-up, spotlight, tilt, burger, aloqa formasi, hero taqdimoti,
-   yangiliklar filtri, kod nusxalash).
+   app.js: sayt interaktivligi ("raximboy-portfolio" shabloni asosida).
+   i18n (UZ/RU/EN), kun/tun rejimi, mobil menyu, loyihalar (filtr + "barchasi"),
+   yangiliklar filtri, nisbiy vaqt, kodni nusxalash, aloqa formasi.
+   Yer shari: globe.js (faqat bosh sahifa).
    ========================================================================== */
 (function () {
   "use strict";
@@ -12,34 +13,37 @@
 
   const LANGS = ["uz", "ru", "en"];
   const THEMES = ["dark", "light"];
+  const store = {
+    get: k => { try { return localStorage.getItem(k); } catch (e) { return null; } },
+    set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} },
+  };
 
-  let lang  = localStorage.getItem("lang")  || "uz";
-  let theme = localStorage.getItem("theme") || "dark";
+  let lang  = store.get("lang")  || "uz";
+  let theme = store.get("theme") || "dark";
   if (!LANGS.includes(lang)) lang = "uz";
   if (!THEMES.includes(theme)) theme = "dark";
 
   function t(key) {
     const d = window.I18N || {};
-    return (d[lang] && d[lang][key]) || (d.en && d.en[key]) || key;
+    return (d[lang] && d[lang][key]) || (d.uz && d.uz[key]) || key;
   }
+  window.siteT = t;   // globe.js yorliqlari uchun
 
   // ============================ I18N ======================================
   function applyLang(next) {
     if (next && LANGS.includes(next)) lang = next;
-    localStorage.setItem("lang", lang);
+    store.set("lang", lang);
     document.documentElement.setAttribute("lang", lang);
 
     $$("[data-i18n]").forEach(el => { el.textContent = t(el.getAttribute("data-i18n")); });
     $$("[data-i18n-ph]").forEach(el => { el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph"))); });
+    $$("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", t(el.getAttribute("data-i18n-aria"))); });
     $$(".lang-switch button").forEach(b => {
       const on = b.getAttribute("data-lang") === lang;
       b.classList.toggle("active", on);
       b.setAttribute("aria-pressed", on ? "true" : "false");
     });
-
-    bindProjFilters();
     renderProjects();
-    startTyping();
     localizeTimes();
     updateTranslateLinks();
     $$(".copy-btn:not(.ok)").forEach(b => { b.textContent = t("guides.copy"); });
@@ -48,364 +52,55 @@
   // ============================ TEMA ======================================
   function applyTheme(next) {
     if (next && THEMES.includes(next)) theme = next;
-    localStorage.setItem("theme", theme);
+    store.set("theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
     const meta = $('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", theme === "light" ? "#f5f7fc" : "#070b19");
-  }
-  function toggleTheme() { applyTheme(theme === "dark" ? "light" : "dark"); }
-
-  // ============================ TYPING ====================================
-  let typeTimer = null;
-  function startTyping() {
-    clearTimeout(typeTimer);
-    const el = $("#typed");
-    if (!el) return;
-    const roles = (window.I18N[lang] && window.I18N[lang]["hero.roles"]) || window.I18N.en["hero.roles"] || [];
-    if (!roles.length) return;
-    let ri = 0, ci = 0, del = false;
-    (function step() {
-      const w = roles[ri % roles.length] || "";
-      if (!del) {
-        el.textContent = w.slice(0, ++ci);
-        if (ci >= w.length) { del = true; typeTimer = setTimeout(step, 1500); return; }
-        typeTimer = setTimeout(step, 65 + Math.random() * 55);
-      } else {
-        el.textContent = w.slice(0, --ci);
-        if (ci <= 0) { del = false; ri++; typeTimer = setTimeout(step, 280); return; }
-        typeTimer = setTimeout(step, 32);
-      }
-    })();
+    if (meta) meta.setAttribute("content", theme === "light" ? "#f5f5ee" : "#101311");
   }
 
-  // ============================ PROJECTS ==================================
-  const ARROW = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg>';
-
-  let projFilter = "all";
-  const PHONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>';
-  const GLOBE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>';
-
-  function renderProjects() {
-    const host = $("#projGrid");
-    if (!host || !window.PROJECTS) return;
-    const list = window.PROJECTS.filter(p => projFilter === "all" || (p.kind || "web") === projFilter);
-    host.innerHTML = list.map((p, i) => {
-      const desc = (p.desc && (p.desc[lang] || p.desc.en)) || "";
-      const initials = p.name.split(/\s+/).map(w => w[0]).slice(0, 2).join("").toUpperCase();
-      const logo = (window.PROJECT_LOGOS || {})[p.key];
-      const icon = logo
-        ? '<div class="proj-icon has-logo" aria-hidden="true"><img src="' + esc(logo) + '" alt="" loading="lazy"></div>'
-        : '<div class="proj-icon" aria-hidden="true">' + esc(initials) + "</div>";
-      const kind = (p.kind || "web") === "app" ? "app" : "web";
-      const tags = p.stack.map(s => "<span>" + esc(s) + "</span>").join("");
-      const plats = (p.platforms || []).map(x => "<span>" + esc(x) + "</span>").join("");
-      let link;
-      if (p.url) link = '<a class="proj-link" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(t("projects.visit")) + " " + ARROW + "</a>";
-      else if (p.status === "in-progress") link = '<span class="proj-link disabled">' + esc(t("projects.soon")) + "</span>";
-      else link = '<span class="proj-link disabled">' + esc(t("projects.private")) + "</span>";
-      const delay = "d" + ((i % 3) + 1);
-      return (
-        '<article class="proj glass reveal ' + delay + ' kind-' + kind + '" data-kind="' + kind + '">' +
-          '<div class="proj-top">' +
-            icon +
-            '<span class="proj-status ' + esc(p.status) + '"><span class="sd"></span>' + esc(t("projects.status_" + p.status.replace("-", "_"))) + "</span>" +
-          "</div>" +
-          '<div class="proj-kind">' + (kind === "app" ? PHONE : GLOBE) + "<span>" + esc(p.type) + " · " + p.year + "</span></div>" +
-          "<h3>" + esc(p.name) + "</h3>" +
-          "<p>" + esc(desc) + "</p>" +
-          '<div class="tags">' + tags + "</div>" +
-          '<div class="proj-foot">' + link + '<div class="plats">' + plats + "</div></div>" +
-        "</article>"
-      );
-    }).join("");
-    $$("[data-proj-filter]").forEach(b => b.classList.toggle("on", b.getAttribute("data-proj-filter") === projFilter));
-    const cnt = $("#projCount"); if (cnt) cnt.textContent = list.length;
-    observeReveals(host);
-    bindProjGlow(host);
-  }
-
-  function bindProjFilters() {
-    $$("[data-proj-filter]").forEach(b => b.addEventListener("click", () => {
-      projFilter = b.getAttribute("data-proj-filter") || "all";
-      renderProjects();
-    }));
-  }
-
-  function bindProjGlow(host) {
-    $$(".proj", host).forEach(card => {
-      card.addEventListener("mousemove", e => {
-        const r = card.getBoundingClientRect();
-        card.style.setProperty("--px", (e.clientX - r.left) + "px");
-        card.style.setProperty("--py", (e.clientY - r.top) + "px");
-      });
-    });
-  }
-
-  // ============================ SCROLL-REVEAL =============================
-  let revealIO = null;
-  function observeReveals(scope) {
-    if (!revealIO) {
-      revealIO = new IntersectionObserver(entries => {
-        entries.forEach(en => {
-          if (en.isIntersecting) { en.target.classList.add("visible"); revealIO.unobserve(en.target); }
-        });
-      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
-    }
-    $$(".reveal:not(.visible)", scope || document).forEach(el => revealIO.observe(el));
-  }
-
-  // ============================ COUNT-UP ==================================
-  function countUp(el) {
-    const target = parseInt(el.getAttribute("data-count"), 10) || 0;
-    const suffix = el.hasAttribute("data-suffix") ? el.getAttribute("data-suffix") : "+";
-    const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
-    const dur = 1300, start = performance.now();
-    (function frame(now) {
-      const p = Math.min((now - start) / dur, 1);
-      el.textContent = fmt(Math.round(target * (1 - Math.pow(1 - p, 3)))) + suffix;
-      if (p < 1) requestAnimationFrame(frame);
-    })(performance.now());
-  }
-  function initCounters() {
-    const io = new IntersectionObserver(entries => {
-      entries.forEach(en => { if (en.isIntersecting) { countUp(en.target); io.unobserve(en.target); } });
-    }, { threshold: 0.5 });
-    $$("[data-count]").forEach(el => io.observe(el));
-  }
-
-  // ============================ SCROLL (nav, progress, spy) ===============
-  function initScroll() {
-    const nav = $("#nav");
-    const progress = $("#progress");
-    const links = $$(".nav-links a");
-    // Faqat bir sahifa ichidagi langar havolalar (#id) scroll-spy'da qatnashadi —
-    // aloqa sahifasidagi "/#about" kabi havolalar querySelector'ni buzmasligi uchun.
-    const inPage = links.filter(a => (a.getAttribute("href") || "").startsWith("#"));
-    const sections = inPage.map(a => $(a.getAttribute("href"))).filter(Boolean);
-    let ticking = false;
-
-    function update() {
-      const y = window.scrollY;
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      if (progress) progress.style.width = (h > 0 ? (y / h) * 100 : 0) + "%";
-      if (nav) nav.classList.toggle("scrolled", y > 20);
-
-      if (sections.length) {
-        let active = sections[0];
-        for (const s of sections) { if (s.getBoundingClientRect().top <= window.innerHeight * 0.35) active = s; }
-        inPage.forEach(a => a.classList.toggle("active", active && a.getAttribute("href") === "#" + active.id));
-      }
-      ticking = false;
-    }
-    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
-    update();
-  }
-
-  // ============================ SPOTLIGHT + TILT =========================
-  function initPointer() {
-    const sp = $("#spotlight");
-    if (sp && matchMedia("(pointer: fine)").matches) {
-      window.addEventListener("pointermove", e => {
-        sp.style.setProperty("--mx", e.clientX + "px");
-        sp.style.setProperty("--my", e.clientY + "px");
-      }, { passive: true });
-    }
-    // Eslatma: hero kartasi tilt/float OLIB TASHLANDI — hero qimirlamasligi uchun.
-  }
-
-  // ============================ MATRIX kod yomg'iri ======================
-  function initMatrix() {
-    const canvas = $("#matrix"), hero = $("#hero");
-    if (!canvas || !hero) return;
-    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const ctx = canvas.getContext("2d", { alpha: true });
-    const DIGITS = "0123456789";
-    const FS = 18;               // ustun kengligi / shrift
-    const FPS = 24;              // animatsiya kadr tezligi (60 emas)
-    const STEP_MS = 1000 / FPS;
-    let W = 0, H = 0, cols = 0, drops = [], speeds = [];
-    function resize() {
-      // dpr 1 — canvas hajmi 4 barobar kichik, ko'z bilan farq sezilmaydi
-      W = hero.clientWidth; H = hero.clientHeight;
-      canvas.width = W; canvas.height = H;
-      canvas.style.width = W + "px"; canvas.style.height = H + "px";
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.font = FS + "px 'JetBrains Mono', ui-monospace, monospace";
-      ctx.textBaseline = "top";
-      cols = Math.ceil(W / FS);
-      drops = Array.from({ length: cols }, () => Math.random() * (H / FS));
-      speeds = Array.from({ length: cols }, () => 0.35 + Math.random() * 0.5); // har ustun o'z tezligida
-      ctx.clearRect(0, 0, W, H);
-    }
-    resize();
-    let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(resize, 120); });
-
-    let running = false, last = 0, rafId = 0;
-    function draw(now) {
-      if (!running) return;
-      rafId = requestAnimationFrame(draw);
-      if (now - last < STEP_MS) return;      // 24 fps ga cheklash
-      last = now;
-      // qisqa quyruq: har kadrda izlarni tezroq o'chiramiz (ustma-ust raqamlar qolmaydi)
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = "rgba(0,0,0,0.22)";
-      ctx.fillRect(0, 0, W, H);
-      ctx.globalCompositeOperation = "source-over";
-      const light = document.documentElement.getAttribute("data-theme") === "light";
-      ctx.fillStyle = light ? "rgba(29,95,216,0.62)" : "rgba(124,176,255,0.85)";   // taqdimot ko'k rangi
-      for (let i = 0; i < cols; i++) {
-        drops[i] += speeds[i];
-        const y = Math.floor(drops[i]) * FS;
-        if (((drops[i] - speeds[i]) | 0) !== (drops[i] | 0)) {   // faqat yangi katakka o'tganda chizamiz
-          ctx.fillText(DIGITS[(Math.random() * 10) | 0], i * FS, y);
-        }
-        if (y > H + FS * 4) drops[i] = -Math.random() * 20;   // tepadan qayta boshlaydi
-      }
-    }
-    function start() { if (running) return; running = true; last = 0; rafId = requestAnimationFrame(draw); }
-    function stop() { running = false; cancelAnimationFrame(rafId); }
-    // Hero ko'rinmasa yoki tab yashirin bo'lsa — to'xtaydi (CPU/GPU tejaladi)
-    const io = new IntersectionObserver(en => { en[0].isIntersecting && !document.hidden ? start() : stop(); }, { threshold: 0.05 });
-    io.observe(hero);
-    document.addEventListener("visibilitychange", () => { document.hidden ? stop() : start(); });
-  }
-
-  // ============================ BURGER (mobil) ===========================
-  function initBurger() {
+  // ============================ MOBIL MENYU ===============================
+  function initMenu() {
     const burger = $("#burger"), links = $("#navLinks");
     if (!burger || !links) return;
+    const close = () => { links.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); };
     burger.addEventListener("click", () => {
       const open = links.classList.toggle("open");
       burger.setAttribute("aria-expanded", open ? "true" : "false");
     });
-    $$("#navLinks a").forEach(a => a.addEventListener("click", () => {
-      links.classList.remove("open"); burger.setAttribute("aria-expanded", "false");
+    $$("a", links).forEach(a => a.addEventListener("click", close));
+    document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+  }
+
+  // ============================ LOYIHALAR =================================
+  let projFilter = "all", projExpanded = false;
+  function renderProjects() {
+    const grid = $("#projectGrid");
+    if (!grid) return;
+    const all = typeof PROJECTS !== "undefined" ? PROJECTS : [];
+    const ps = all.filter(p => projFilter === "all" || p.kind === projFilter);
+    grid.innerHTML = (projExpanded ? ps : ps.slice(0, 4)).map(p => {
+      const desc = (p.desc && (p.desc[lang] || p.desc.uz)) || "";
+      const side = p.url
+        ? `<a class="arrow" href="${esc(p.url)}" target="_blank" rel="noopener" aria-label="${esc(p.name)}: ${esc(t("projects.open_aria"))}">↗</a>`
+        : `<span class="eyebrow">${p.status === "in-progress" ? esc(t("projects.in_progress")) : "ANDROID · IOS"}</span>`;
+      return `<article class="project"><div class="project-art"><small>${esc((p.type || "").toUpperCase())}</small><strong>${esc(p.name)}</strong></div>` +
+        `<div class="project-body"><div class="project-top"><h3>${esc(p.name)}</h3>${side}</div><p>${esc(desc)}</p>` +
+        `<div class="tags">${(p.stack || []).map(s => `<span>${esc(s)}</span>`).join("")}</div></div></article>`;
+    }).join("");
+    const more = $("#more");
+    if (more) more.hidden = projExpanded || ps.length <= 4;
+  }
+  function initProjects() {
+    $$("[data-filter]").forEach(b => b.addEventListener("click", () => {
+      projFilter = b.getAttribute("data-filter"); projExpanded = false;
+      $$("[data-filter]").forEach(x => { const on = x === b; x.classList.toggle("active", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+      renderProjects();
     }));
+    const more = $("#more");
+    if (more) more.addEventListener("click", () => { projExpanded = true; renderProjects(); });
   }
 
-  // ============================ ALOQA FORMASI ============================
-  function initContactForm() {
-    const form = $("#contactForm");
-    if (!form) return;
-    const statusEl = $("#cf-status"), btn = $("#cf-send");
-    const setStatus = (key, ok) => { statusEl.textContent = t(key); statusEl.className = "cf-status " + (ok ? "ok" : "err"); };
-
-    // Muvaffaqiyat modali (kichik popup). Faqat aloqa sahifasida mavjud.
-    const modal = $("#okModal");
-    const openModal = () => {
-      if (!modal) return;
-      modal.hidden = false;
-      requestAnimationFrame(() => modal.classList.add("show"));
-      const close = $("#okm-close"); if (close) close.focus();
-    };
-    const closeModal = () => {
-      if (!modal) return;
-      modal.classList.remove("show");
-      setTimeout(() => { modal.hidden = true; }, 220);
-    };
-    if (modal) {
-      $("#okm-close").addEventListener("click", closeModal);
-      $("#okm-x").addEventListener("click", closeModal);
-      modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
-      document.addEventListener("keydown", e => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
-    }
-
-    // Telefon: yozish paytida faqat ruxsat etilgan belgilar (raqam, bo'sh joy, + - ( ));
-    // "+" faqat eng boshida turishi mumkin.
-    const phoneEl = $("#cf-phone");
-    if (phoneEl) {
-      phoneEl.addEventListener("input", () => {
-        let v = phoneEl.value.replace(/[^\d\s()+-]/g, "");        // taqiqlangan belgilarni olib tashlash
-        v = v.replace(/(?!^)\+/g, "");                            // "+" faqat boshida
-        if (phoneEl.value !== v) phoneEl.value = v;
-      });
-    }
-    // To'g'ri raqammi? — ixtiyoriy ajratuvchilarni tashlab, 7–15 ta raqam bo'lsin.
-    const phoneValid = (v) => { const d = v.replace(/[\s()+-]/g, ""); return /^\d{7,15}$/.test(d); };
-
-    form.addEventListener("submit", async e => {
-      e.preventDefault();
-      const name = $("#cf-name").value.trim();
-      const contact = $("#cf-contact").value.trim();
-      const phone = $("#cf-phone").value.trim();
-      const message = $("#cf-message").value.trim();
-      const website = (form.querySelector('input[name="website"]') || {}).value || "";
-      const token = (form.querySelector('input[name="csrfmiddlewaretoken"]') || {}).value || "";
-      if (!name || !message) { setStatus("contact.form.missing", false); return; }
-      if (phone && !phoneValid(phone)) { setStatus("contact.form.phone_invalid", false); phoneEl.focus(); return; }
-
-      btn.disabled = true; statusEl.textContent = t("contact.form.sending"); statusEl.className = "cf-status";
-      try {
-        const resp = await fetch("/api/contact/", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", "X-CSRFToken": token },
-          body: JSON.stringify({ name, contact, phone, message, website }),
-        });
-        const data = await resp.json().catch(() => ({}));
-        if (resp.ok && data.ok) {
-          form.reset();
-          if (modal) { statusEl.textContent = ""; statusEl.className = "cf-status"; openModal(); }
-          else setStatus("contact.form.ok", true);
-        }
-        else if (resp.status === 429 || data.error === "rate_limited") setStatus("contact.form.rate", false);
-        else if (resp.status === 503 || data.error === "not_configured") setStatus("contact.form.not_configured", false);
-        else if (data.error === "bad_phone") setStatus("contact.form.phone_invalid", false);
-        else setStatus("contact.form.err", false);
-      } catch (_) { setStatus("contact.form.err", false); }
-      finally { btn.disabled = false; }
-    });
-  }
-
-  // ============================ MAGNIT TUGMALAR ==========================
-  function initMagnetic() {
-    if (!matchMedia("(pointer: fine)").matches) return;
-    const STRENGTH = 0.12, MAX = 5;   // juda yengil magnit: ozgina qimirlaydi (maks ±5px)
-    const clamp = v => Math.max(-MAX, Math.min(MAX, v));
-    $$(".btn, .socials a, .icon-btn").forEach(el => {
-      el.addEventListener("pointermove", e => {
-        const r = el.getBoundingClientRect();
-        const mx = e.clientX - (r.left + r.width / 2);
-        const my = e.clientY - (r.top + r.height / 2);
-        el.style.transform = "translate(" + clamp(mx * STRENGTH) + "px," + clamp(my * STRENGTH) + "px)";
-      });
-      el.addEventListener("pointerleave", () => { el.style.transform = ""; });
-    });
-  }
-
-  // ============================ ISM: harf-harf reveal ====================
-  function splitName() {
-    // Harf-harf animatsiya olib tashlandi: gradientli matn transform bilan chizilganda
-    // birinchi harf ("R") xira/kesik ko'rinardi. Ism yaxlit, h1 ning .reveal animatsiyasi bilan chiqadi.
-    const el = $(".hero .name");
-    if (el) el.classList.add("fonts-ready");
-  }
-
-  // ============================ HERO: JONLI TAQDIMOT =====================
-  // iframe DOM tayyor bo'lgach bo'sh vaqtda ulanadi (LCP ga xalaqit bermaydi); ko'rinmay
-  // qolganda taqdimotga "pause" yuboriladi, CPU bekorga ishlamaydi.
-  function initHeroDeck() {
-    const f = $("#heroDeck");
-    if (!f) return;
-    const conn = navigator.connection || {};
-    if (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")) return;   // trafik tejash rejimida faqat poster
-    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let src = f.getAttribute("data-src");
-    if (reduce) src = src.replace(/autoplay=\d+/, "autoplay=0");
-    let visible = true, ready = false;
-    const send = () => { if (ready && f.contentWindow) f.contentWindow.postMessage({ deck: visible ? "play" : "pause" }, location.origin); };
-    const reveal = () => { if (ready) return; ready = true; f.classList.add("on"); send(); };
-    // taqdimot o'zi "ready" yuboradi (DOM tayyor); "load" esa tashqi rasmlarni ham kutadi, zaxira sifatida qoladi
-    window.addEventListener("message", e => { if (e.source === f.contentWindow && e.data && e.data.deck === "ready") reveal(); });
-    f.addEventListener("load", reveal);
-    const go = () => { f.src = src; };
-    // DOM tayyor bo'lgach bo'sh vaqtda (ko'pi bilan 1.2s): sekin shrift/rasmlar "load"ni kechiktirsa ham kutmaydi
-    if ("requestIdleCallback" in window) requestIdleCallback(go, { timeout: 1200 }); else setTimeout(go, 400);
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(es => { visible = es[0].isIntersecting; send(); }, { threshold: 0.05 }).observe(f);
-    }
-  }
-
-  // ============================ YANGILIKLAR ==============================
+  // ============================ YANGILIKLAR ===============================
   function initNewsFilters() {
     const btns = $$("[data-news-filter]");
     if (!btns.length) return;
@@ -467,7 +162,80 @@
     });
   }
 
-  // ============================ START ====================================
+  // ============================ ALOQA FORMASI =============================
+  function initContactForm() {
+    const form = $("#contactForm");
+    if (!form) return;
+    const statusEl = $("#cf-status"), btn = $("#cf-send");
+    const setStatus = (key, ok) => { statusEl.textContent = t(key); statusEl.className = "cf-status " + (ok ? "ok" : "err"); };
+
+    // Muvaffaqiyat modali (kichik popup). Faqat aloqa sahifasida mavjud.
+    const modal = $("#okModal");
+    const openModal = () => {
+      if (!modal) return;
+      modal.hidden = false;
+      requestAnimationFrame(() => modal.classList.add("show"));
+      const close = $("#okm-close"); if (close) close.focus();
+    };
+    const closeModal = () => {
+      if (!modal) return;
+      modal.classList.remove("show");
+      setTimeout(() => { modal.hidden = true; }, 220);
+    };
+    if (modal) {
+      $("#okm-close").addEventListener("click", closeModal);
+      $("#okm-x").addEventListener("click", closeModal);
+      modal.addEventListener("click", e => { if (e.target === modal) closeModal(); });
+      document.addEventListener("keydown", e => { if (e.key === "Escape" && !modal.hidden) closeModal(); });
+    }
+
+    // Telefon: yozish paytida faqat ruxsat etilgan belgilar (raqam, bo'sh joy, + - ( ));
+    // "+" faqat eng boshida turishi mumkin.
+    const phoneEl = $("#cf-phone");
+    if (phoneEl) {
+      phoneEl.addEventListener("input", () => {
+        let v = phoneEl.value.replace(/[^\d\s()+-]/g, "");        // taqiqlangan belgilarni olib tashlash
+        v = v.replace(/(?!^)\+/g, "");                            // "+" faqat boshida
+        if (phoneEl.value !== v) phoneEl.value = v;
+      });
+    }
+    // To'g'ri raqammi? Ixtiyoriy ajratuvchilarni tashlab, 7–15 ta raqam bo'lsin.
+    const phoneValid = (v) => { const d = v.replace(/[\s()+-]/g, ""); return /^\d{7,15}$/.test(d); };
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      const name = $("#cf-name").value.trim();
+      const contact = $("#cf-contact").value.trim();
+      const phone = $("#cf-phone").value.trim();
+      const message = $("#cf-message").value.trim();
+      const website = (form.querySelector('input[name="website"]') || {}).value || "";
+      const token = (form.querySelector('input[name="csrfmiddlewaretoken"]') || {}).value || "";
+      if (!name || !message) { setStatus("contact.form.missing", false); return; }
+      if (phone && !phoneValid(phone)) { setStatus("contact.form.phone_invalid", false); phoneEl.focus(); return; }
+
+      btn.disabled = true; statusEl.textContent = t("contact.form.sending"); statusEl.className = "cf-status";
+      try {
+        const resp = await fetch("/api/contact/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", "X-CSRFToken": token },
+          body: JSON.stringify({ name, contact, phone, message, website }),
+        });
+        const data = await resp.json().catch(() => ({}));
+        if (resp.ok && data.ok) {
+          form.reset();
+          if (modal) { statusEl.textContent = ""; statusEl.className = "cf-status"; openModal(); }
+          else setStatus("contact.form.ok", true);
+        }
+        else if (resp.status === 429 || data.error === "rate_limited") setStatus("contact.form.rate", false);
+        else if (resp.status === 503 || data.error === "not_configured") setStatus("contact.form.not_configured", false);
+        else if (data.error === "bad_phone") setStatus("contact.form.phone_invalid", false);
+        else setStatus("contact.form.err", false);
+      } catch (_) { setStatus("contact.form.err", false); }
+      finally { btn.disabled = false; }
+    });
+  }
+
+  // ============================ START =====================================
   document.addEventListener("DOMContentLoaded", () => {
     // deep-link: ?lang=ru&theme=light
     const q = new URLSearchParams(location.search);
@@ -475,28 +243,15 @@
     if (THEMES.includes(q.get("theme"))) theme = q.get("theme");
 
     applyTheme(theme);
-    applyLang(lang);          // renderProjects + startTyping ham chaqiradi
-    splitName();
-    initMatrix();
-    observeReveals();
-    initCounters();
-    initScroll();
-    initPointer();
-    initMagnetic();
-    initBurger();
-    initContactForm();
-    initHeroDeck();
-    initNewsFilters();
+    initProjects();
     initCopyButtons();
+    applyLang(lang);          // loyihalar, vaqt va tarjima havolalari shu yerda chiziladi
+    initMenu();
+    initNewsFilters();
+    initContactForm();
 
     $$(".lang-switch button").forEach(b => b.addEventListener("click", () => applyLang(b.getAttribute("data-lang"))));
-    const tt = $("#themeToggle"); if (tt) tt.addEventListener("click", toggleTheme);
-
-    // Deep-link #hash: loyihalar JS bilan render bo'lgach pozitsiyani to'g'rilash
-    if (location.hash && location.hash.length > 1) {
-      const target = document.querySelector(location.hash);
-      if (target) setTimeout(() => target.scrollIntoView({ block: "start" }), 60);
-    }
+    const tt = $("#themeToggle");
+    if (tt) tt.addEventListener("click", () => applyTheme(theme === "dark" ? "light" : "dark"));
   });
-
 })();

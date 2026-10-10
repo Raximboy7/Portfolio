@@ -165,8 +165,11 @@ class PageTests(SimpleTestCase):
 
     def test_home(self):
         html = self.get("index")
-        self.assertIn('id="heroDeck"', html)
-        self.assertIn("/taqdimot/?embed=1", html)
+        self.assertIn('id="earth"', html)                     # yer shari (hero)
+        self.assertIn("portfolio/js/globe-points.js", html)
+        self.assertIn('id="projectGrid"', html)
+        self.assertIn('href="/taqdimot/"', html)              # AI bo'limidagi taqdimot kartasi
+        self.assertIn('data-lang="ru"', html)                 # uch til saqlangan
         self.assertIn("World AI story", html)
         self.assertIn("Sun’iy intellekt haqida xabar", html)
         self.assertIn(reverse("guide", args=["prompt-yozish"]), html)
