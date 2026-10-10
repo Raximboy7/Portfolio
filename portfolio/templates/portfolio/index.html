@@ -127,6 +127,27 @@
       <a class="contact-form-link" href="{% url 'contact' %}" data-i18n="contact.form_link">yoki sayt orqali xabar qoldiring</a>
     </div>
   </div>
+
+  <!-- Loyiha logotiplari va sayt skrinshotlari (static tegi production'da xeshlangan nomlarni beradi) -->
+  <script>
+    window.PROJECT_ASSETS = {
+      "boss-school": { logo: "{% static 'portfolio/img/projects/boss-school.png' %}", shot: "{% static 'portfolio/img/shots/boss-school.jpg' %}" },
+      "alaziz-academy": { logo: "{% static 'portfolio/img/projects/alaziz-academy.png' %}", shot: "{% static 'portfolio/img/shots/alaziz-academy.jpg' %}" },
+      "jibas": { logo: "{% static 'portfolio/img/projects/jibas.png' %}", shot: "{% static 'portfolio/img/shots/jibas.jpg' %}" },
+      "sarrax": { logo: "{% static 'portfolio/img/projects/sarrax.png' %}", shot: "{% static 'portfolio/img/shots/sarrax.jpg' %}" },
+      "devnest": { logo: "{% static 'portfolio/img/projects/devnest.svg' %}", shot: "{% static 'portfolio/img/shots/devnest.jpg' %}" },
+      "bozorlink": { logo: "{% static 'portfolio/img/projects/bozorlink.svg' %}", shot: "{% static 'portfolio/img/shots/bozorlink.jpg' %}" },
+      "nevio": { logo: "{% static 'portfolio/img/projects/nevio.png' %}", shot: "{% static 'portfolio/img/shots/nevio.jpg' %}" },
+      "sillage": { logo: "{% static 'portfolio/img/projects/sillage.svg' %}", shot: "{% static 'portfolio/img/shots/sillage.jpg' %}" },
+      "mirakbar": { logo: "{% static 'portfolio/img/projects/mirakbar.png' %}", shot: "{% static 'portfolio/img/shots/mirakbar.jpg' %}" },
+      "portfolio": { logo: "{% static 'portfolio/img/favicon.svg' %}", shot: "{% static 'portfolio/img/shots/portfolio.jpg' %}" },
+      "boss-student": { logo: "{% static 'portfolio/img/projects/boss-student.png' %}" },
+      "boss-teacher": { logo: "{% static 'portfolio/img/projects/boss-teacher.png' %}" },
+      "boss-parent": { logo: "{% static 'portfolio/img/projects/boss-parent.png' %}" },
+      "aziz-teacher": { logo: "{% static 'portfolio/img/projects/aziz-teacher.png' %}" },
+      "chat-app": { logo: "{% static 'portfolio/img/projects/chat-app.svg' %}" }
+    };
+  </script>
 </main>
 {% endblock %}
 

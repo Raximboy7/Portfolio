@@ -43,6 +43,17 @@ const PROJECTS = [
     },
   },
   {
+    key: "sarrax", kind: "web", name: "SarRax", url: "https://sarrax.uz",
+    type: "Social · Xavfsiz muloqot", role: "Founder & Full-stack Developer",
+    stack: ["Flutter", "Supabase", "PostgreSQL", "React", "Deno"], platforms: ["Web", "Android", "iOS"],
+    year: 2026, status: "live",
+    desc: {
+      uz: "Shaxsi tasdiqlangan foydalanuvchilar uchun xavfsiz muloqot, tanishuv va oilaviy xabardorlik ilovasi: hujjat va yuz orqali tasdiqlash, firibgarlikdan himoya.",
+      ru: "Приложение для безопасного общения, знакомств и семейной осведомлённости среди пользователей с подтверждённой личностью: проверка по документу и лицу, защита от мошенничества.",
+      en: "A safe messaging, introductions and family-awareness app for identity-verified users: document and face verification, fraud protection.",
+    },
+  },
+  {
     key: "devnest", kind: "web", name: "DevNest", url: "https://devnest.uz",
     type: "PaaS · Hosting", role: "Founder & Backend Developer",
     stack: ["Django", "Docker", "Nginx", "PostgreSQL"], platforms: ["Web"],

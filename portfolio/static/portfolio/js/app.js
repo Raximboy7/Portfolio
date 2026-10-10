@@ -77,13 +77,20 @@
     const grid = $("#projectGrid");
     if (!grid) return;
     const all = typeof PROJECTS !== "undefined" ? PROJECTS : [];
+    const assets = window.PROJECT_ASSETS || {};
     const ps = all.filter(p => projFilter === "all" || p.kind === projFilter);
     grid.innerHTML = (projExpanded ? ps : ps.slice(0, 4)).map(p => {
       const desc = (p.desc && (p.desc[lang] || p.desc.uz)) || "";
       const side = p.url
         ? `<a class="arrow" href="${esc(p.url)}" target="_blank" rel="noopener" aria-label="${esc(p.name)}: ${esc(t("projects.open_aria"))}">↗</a>`
         : `<span class="eyebrow">${p.status === "in-progress" ? esc(t("projects.in_progress")) : "ANDROID · IOS"}</span>`;
-      return `<article class="project"><div class="project-art"><small>${esc((p.type || "").toUpperCase())}</small><strong>${esc(p.name)}</strong></div>` +
+      const as = assets[p.key] || {}, type = esc((p.type || "").toUpperCase());
+      const art = as.shot
+        ? `<a class="project-art has-shot" href="${esc(p.url)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">` +
+          `<img class="shot" src="${esc(as.shot)}" alt="" loading="lazy" decoding="async" width="960" height="600"><small>${type}</small></a>` +
+          (as.logo ? `<span class="logo-chip"><img src="${esc(as.logo)}" alt="" loading="lazy" decoding="async" width="40" height="40"></span>` : "")
+        : `<div class="project-art is-app">${as.logo ? `<img class="app-icon" src="${esc(as.logo)}" alt="" loading="lazy" decoding="async" width="76" height="76">` : ""}<small>${type}</small><strong>${esc(p.name)}</strong></div>`;
+      return `<article class="project${as.shot ? " has-shot" : ""}">${art}` +
         `<div class="project-body"><div class="project-top"><h3>${esc(p.name)}</h3>${side}</div><p>${esc(desc)}</p>` +
         `<div class="tags">${(p.stack || []).map(s => `<span>${esc(s)}</span>`).join("")}</div></div></article>`;
     }).join("");
