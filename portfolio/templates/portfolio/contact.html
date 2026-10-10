@@ -1,25 +1,17 @@
 {% extends "portfolio/base.html" %}
 
-{% block title %}{{ site.name }} — Aloqa{% endblock %}
-{% block description %}Raximboy Ibrohimov bilan bog'laning — loyiha, hamkorlik yoki savol bo'yicha to'g'ridan-to'g'ri xabar yuboring.{% endblock %}
+{% block title %}Aloqa · {{ site.name }}{% endblock %}
+{% block description %}Raximboy Ibrohimov bilan bog'laning: loyiha, hamkorlik yoki savol bo'yicha to'g'ridan-to'g'ri xabar yuboring.{% endblock %}
 
-{% block logo_href %}{% url 'index' %}{% endblock %}
-{% block footer_up_href %}{% url 'contact' %}{% endblock %}
 
-{% block nav_links %}
-  <a href="{% url 'index' %}#about" data-i18n="nav.about">Men haqimda</a>
-  <a href="{% url 'index' %}#skills" data-i18n="nav.skills">Ko'nikmalar</a>
-  <a href="{% url 'index' %}#projects" data-i18n="nav.projects">Loyihalar</a>
-  <a href="{% url 'contact' %}" class="active" data-i18n="nav.contact">Aloqa</a>
-{% endblock %}
 
 {% block content %}
   <!-- ============================ CONTACT (alohida sahifa) =========================== -->
   <section id="contact" class="contact-page">
     <div class="wrap">
-      <div class="kicker reveal" data-i18n="contact.kicker">04 — Aloqa</div>
+      <div class="kicker reveal" data-i18n="contact.kicker">Aloqa</div>
       <h2 class="section-title reveal" data-i18n="contact.title">Keling, gaplashamiz</h2>
-      <p class="section-sub reveal d1" data-i18n="contact.subtitle">Loyiha, hamkorlik yoki shunchaki salom — yozing, javob beraman!</p>
+      <p class="section-sub reveal d1" data-i18n="contact.subtitle">Loyiha, hamkorlik yoki shunchaki salom: yozing, javob beraman!</p>
 
       <div class="contact-grid">
         <div class="contact-side reveal d1">

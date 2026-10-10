@@ -1,6 +1,7 @@
 /* =============================================================================
-   app.js — interaktivlik: i18n, tema, typing, scroll-reveal, projects,
-   count-up, spotlight, tilt, burger, aloqa formasi.
+   app.js: interaktivlik (i18n, tema, typing, scroll-reveal, projects,
+   count-up, spotlight, tilt, burger, aloqa formasi, hero taqdimoti,
+   yangiliklar filtri, kod nusxalash).
    ========================================================================== */
 (function () {
   "use strict";
@@ -39,6 +40,9 @@
     bindProjFilters();
     renderProjects();
     startTyping();
+    localizeTimes();
+    updateTranslateLinks();
+    $$(".copy-btn:not(.ok)").forEach(b => { b.textContent = t("guides.copy"); });
   }
 
   // ============================ TEMA ======================================
@@ -153,10 +157,12 @@
   // ============================ COUNT-UP ==================================
   function countUp(el) {
     const target = parseInt(el.getAttribute("data-count"), 10) || 0;
+    const suffix = el.hasAttribute("data-suffix") ? el.getAttribute("data-suffix") : "+";
+    const fmt = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "\u00a0");
     const dur = 1300, start = performance.now();
     (function frame(now) {
       const p = Math.min((now - start) / dur, 1);
-      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + "+";
+      el.textContent = fmt(Math.round(target * (1 - Math.pow(1 - p, 3)))) + suffix;
       if (p < 1) requestAnimationFrame(frame);
     })(performance.now());
   }
@@ -374,6 +380,90 @@
     if (el) el.classList.add("fonts-ready");
   }
 
+  // ============================ HERO: JONLI TAQDIMOT =====================
+  // iframe sahifa to'liq yuklangach ulanadi (LCP ga xalaqit bermaydi); ko'rinmay
+  // qolganda taqdimotga "pause" yuboriladi, CPU bekorga ishlamaydi.
+  function initHeroDeck() {
+    const f = $("#heroDeck");
+    if (!f) return;
+    const conn = navigator.connection || {};
+    if (conn.saveData || /(^|-)2g$/.test(conn.effectiveType || "")) return;   // trafik tejash rejimida faqat poster
+    const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let src = f.getAttribute("data-src");
+    if (reduce) src = src.replace(/autoplay=\d+/, "autoplay=0");
+    let visible = true, ready = false;
+    const send = () => { if (ready && f.contentWindow) f.contentWindow.postMessage({ deck: visible ? "play" : "pause" }, location.origin); };
+    f.addEventListener("load", () => { ready = true; f.classList.add("on"); send(); });
+    const go = () => { f.src = src; };
+    const start = () => ("requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 2500 }) : setTimeout(go, 600));
+    if (document.readyState === "complete") start(); else window.addEventListener("load", start, { once: true });
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(es => { visible = es[0].isIntersecting; send(); }, { threshold: 0.05 }).observe(f);
+    }
+  }
+
+  // ============================ YANGILIKLAR ==============================
+  function initNewsFilters() {
+    const btns = $$("[data-news-filter]");
+    if (!btns.length) return;
+    const cards = $$("#newsList .news-card"), none = $("#newsNone");
+    btns.forEach(b => b.addEventListener("click", () => {
+      const f = b.getAttribute("data-news-filter");
+      btns.forEach(x => { const on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+      let shown = 0;
+      cards.forEach(c => { const hide = f !== "all" && c.getAttribute("data-region") !== f; c.hidden = hide; if (!hide) shown++; });
+      if (none) none.hidden = shown > 0;
+    }));
+  }
+
+  // Nisbiy vaqt joriy tilda (o'zbekcha qo'lda: brauzer Intl'i uz lokalini buzadi)
+  const OYLAR = ["yanvar", "fevral", "mart", "aprel", "may", "iyun", "iyul", "avgust", "sentabr", "oktabr", "noyabr", "dekabr"];
+  function agoText(iso) {
+    const d = new Date(iso);
+    if (isNaN(d)) return null;
+    const sec = (Date.now() - d.getTime()) / 1000;
+    const day0 = x => new Date(x.getFullYear(), x.getMonth(), x.getDate()).getTime();
+    const days = Math.round((day0(new Date()) - day0(d)) / 86400000);
+    if (lang === "uz") {
+      if (sec < 90) return "hozirgina";
+      if (sec < 3600) return Math.floor(sec / 60) + " daqiqa oldin";
+      if (days === 0) return Math.floor(sec / 3600) + " soat oldin";
+      if (days === 1) return "kecha";
+      if (days < 7) return days + " kun oldin";
+      return d.getDate() + "-" + OYLAR[d.getMonth()] + (d.getFullYear() !== new Date().getFullYear() ? ", " + d.getFullYear() : "");
+    }
+    const rtf = new Intl.RelativeTimeFormat(lang, { numeric: "auto" });
+    if (sec < 3600) return rtf.format(-Math.max(1, Math.floor(sec / 60)), "minute");
+    if (days === 0) return rtf.format(-Math.floor(sec / 3600), "hour");
+    if (days < 7) return rtf.format(-days, "day");
+    return d.toLocaleDateString(lang, { day: "numeric", month: "long" });
+  }
+  function localizeTimes() {
+    $$("time[data-ago]").forEach(t => { const s = agoText(t.getAttribute("datetime")); if (s) t.textContent = s; });
+  }
+  function updateTranslateLinks() {
+    $$(".nc-tr").forEach(a => {
+      a.hidden = lang === "en";
+      a.href = a.href.replace(/([?&]tl=)[a-z]+/, "$1" + lang);
+    });
+  }
+
+  // ============================ MAQOLA: KODNI NUSXALASH ==================
+  function initCopyButtons() {
+    $$(".article pre").forEach(pre => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "copy-btn"; b.textContent = t("guides.copy");
+      b.addEventListener("click", async () => {
+        const code = pre.querySelector("code") || pre;
+        try { await navigator.clipboard.writeText(code.innerText.replace(/\n$/, "")); b.textContent = t("guides.copied"); b.classList.add("ok"); }
+        catch (e) { b.textContent = "Ctrl+C"; }
+        setTimeout(() => { b.textContent = t("guides.copy"); b.classList.remove("ok"); }, 1800);
+      });
+      pre.classList.add("has-copy");
+      pre.appendChild(b);
+    });
+  }
+
   // ============================ START ====================================
   document.addEventListener("DOMContentLoaded", () => {
     // deep-link: ?lang=ru&theme=light
@@ -392,6 +482,9 @@
     initMagnetic();
     initBurger();
     initContactForm();
+    initHeroDeck();
+    initNewsFilters();
+    initCopyButtons();
 
     $$(".lang-switch button").forEach(b => b.addEventListener("click", () => applyLang(b.getAttribute("data-lang"))));
     const tt = $("#themeToggle"); if (tt) tt.addEventListener("click", toggleTheme);

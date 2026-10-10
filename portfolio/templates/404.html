@@ -1,13 +1,8 @@
 {% extends "portfolio/base.html" %}
 {% load static %}
-{% block title %}404 — Sahifa topilmadi · {{ site.name }}{% endblock %}
+{% block title %}404 · Sahifa topilmadi{% endblock %}
 {% block description %}Sahifa topilmadi{% endblock %}
 {% block logo_href %}/{% endblock %}
-{% block nav_links %}
-<a href="/#about" data-i18n="nav.about">Men haqimda</a>
-<a href="/#projects" data-i18n="nav.projects">Loyihalar</a>
-<a href="{% url 'contact' %}" data-i18n="nav.contact">Aloqa</a>
-{% endblock %}
 {% block footer_up_href %}/{% endblock %}
 {% block content %}
 <style>

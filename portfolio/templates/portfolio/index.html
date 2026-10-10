@@ -1,5 +1,5 @@
 {% extends "portfolio/base.html" %}
-{% load static %}
+{% load static uz %}
 
 {% block content %}
   <!-- ============================== HERO ============================= -->
@@ -11,21 +11,21 @@
       <div class="hero-text">
         <div class="badge-avail reveal">
           <span class="dot-live" aria-hidden="true"></span>
-          <span data-i18n="hero.available">Yangi loyihalar uchun ochiqman</span>
+          <span data-i18n="hero.available">Yangi loyihalar va AI treninglar uchun ochiqman</span>
         </div>
         <h1 class="reveal d1">
           <span class="greet" data-i18n="hero.greeting">Assalomu alaykum, men</span>
           <span class="name">Raximboy Ibrohimov</span>
         </h1>
         <div class="typed-line reveal d2"><span id="typed"></span><span class="typed-cursor" aria-hidden="true"></span></div>
-        <p class="lead reveal d2" data-i18n="hero.tagline">Python, Django va Flutter yordamida tez, ishonchli va chiroyli mahsulotlar yarataman.</p>
+        <p class="lead reveal d2" data-i18n="hero.tagline">Python, Django va Flutter bilan ishonchli tizimlar quraman. AI agentlar bilan tizimli ishlayman va bu tajribani taqdimot hamda qo'llanmalarda ulashaman.</p>
 
         <div class="cta-row reveal d3">
-          <a href="#projects" class="btn btn-primary">
-            <span data-i18n="hero.cta_projects">Loyihalarni ko'rish</span>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          <a href="{% url 'taqdimot' %}" class="btn btn-primary">
+            {% include "portfolio/_icon.html" with name="play" %}
+            <span data-i18n="hero.cta_deck">Taqdimotni ko'rish</span>
           </a>
-          <a href="{% url 'contact' %}" class="btn btn-ghost"><span data-i18n="hero.cta_contact">Bog'lanish</span></a>
+          <a href="#projects" class="btn btn-ghost"><span data-i18n="hero.cta_projects">Loyihalarni ko'rish</span></a>
         </div>
 
         <div class="socials reveal d4">
@@ -47,17 +47,21 @@
         </div>
       </div>
 
-      <!-- Dumaloq rasm (kod chip bilan) -->
-      <div class="hero-photo reveal d3" id="heroCard">
-        <div class="hp-ring">
-          <img src="{% static 'portfolio/img/avatar.jpg' %}" alt="Raximboy Ibrohimov" width="260" height="260" loading="eager" decoding="async" fetchpriority="high">
-        </div>
-        <span class="hp-dot" aria-hidden="true"></span>
-        <div class="hp-tag">
-          <b>Raximboy Ibrohimov</b>
-          <small>Backend &amp; Mobile · Django · Flutter · Tashkent 🇺🇿</small>
-        </div>
-      </div>
+      <!-- Jonli taqdimot ekrani: /taqdimot/?embed=1 (sahifa yuklangach ulanadi) -->
+      <figure class="hero-deck reveal d3">
+        <a class="hd-screen" href="{% url 'taqdimot' %}" aria-label="Sun'iy intellekt taqdimotini to'liq ekranda ochish">
+          <span class="hd-bar" aria-hidden="true"><i></i><i></i><i></i><b class="mono">ibrohimov-dev.uz/taqdimot</b></span>
+          <span class="hd-frame">
+            <span class="hd-poster" aria-hidden="true"><small class="mono">Taqdimot · 2026</small><b>Sun’iy<br><em>intellekt</em></b></span>
+            <iframe id="heroDeck" title="Sun'iy intellekt taqdimoti, jonli ko'rinish" data-src="{% url 'taqdimot' %}?embed=1&amp;autoplay=7" tabindex="-1" aria-hidden="true"></iframe>
+            <span class="hd-play" aria-hidden="true">{% include "portfolio/_icon.html" with name="play" %}</span>
+          </span>
+        </a>
+        <figcaption class="hd-cap">
+          <span class="hd-title"><b data-i18n="hero.deck_title">Sun'iy intellekt</b><small class="mono" data-i18n="hero.deck_meta">Taqdimot · 24 slayd · telefonga mos</small></span>
+          <a href="{% url 'taqdimot' %}" class="hd-open"><span data-i18n="hero.deck_open">To'liq ekranda</span>{% include "portfolio/_icon.html" with name="external" %}</a>
+        </figcaption>
+      </figure>
     </div>
 
     <a href="#about" class="scroll-hint" aria-label="Pastga">
@@ -69,8 +73,8 @@
   <!-- ============================ MARQUEE ============================ -->
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
-      <span>Backend</span><span class="out">Mobile</span><span>Python</span><span class="out">Django</span><span>Flutter</span><span class="out">REST&nbsp;API</span><span>Docker</span><span class="out">PostgreSQL</span>
-      <span>Backend</span><span class="out">Mobile</span><span>Python</span><span class="out">Django</span><span>Flutter</span><span class="out">REST&nbsp;API</span><span>Docker</span><span class="out">PostgreSQL</span>
+      <span>AI&nbsp;agentlar</span><span class="out">Python</span><span>Django</span><span class="out">Flutter</span><span>Claude&nbsp;Code</span><span class="out">REST&nbsp;API</span><span>n8n</span><span class="out">PostgreSQL</span>
+      <span>AI&nbsp;agentlar</span><span class="out">Python</span><span>Django</span><span class="out">Flutter</span><span>Claude&nbsp;Code</span><span class="out">REST&nbsp;API</span><span>n8n</span><span class="out">PostgreSQL</span>
     </div>
   </div>
 
@@ -93,38 +97,44 @@
   <!-- ============================= ABOUT ============================= -->
   <section id="about">
     <div class="wrap">
-      <div class="kicker reveal" data-i18n="about.kicker">01 — Tanishuv</div>
+      <div class="kicker reveal" data-i18n="about.kicker">01 · Tanishuv</div>
       <h2 class="section-title reveal" data-i18n="about.title">Men haqimda</h2>
 
       <div class="about-grid">
         <div class="about-text reveal d1">
-          <p data-i18n="about.p1">Men O'zbekistonlik Backend va Mobile dasturchiman. Toza kod va chiroyli interfeyslarni yaxshi ko'raman.</p>
-          <p data-i18n="about.p2">boss-school.uz va alazizacademy.uz ta'lim platformalari hamda ularning mobil ilovalarini ishlab chiqdim.</p>
-          <p class="mono" style="color:var(--brand-2)" data-i18n="about.fun_fact">Men qahvani toza kodga aylantiraman ☕</p>
+          <p data-i18n="about.p1">Full-stack dasturchiman: Python va Django, Flutter, React bilan ishlayman, serverlarni ham o'zim sozlayman. Asosan ta'lim, savdo va SaaS yo'nalishlarida real ishlab turgan tizimlar quraman.</p>
+          <p data-i18n="about.p2">Eng katta loyiham: 17 filialli o'quv markazining CRM va LMS tizimi, unga kuniga 110 mingga yaqin so'rov keladi. Hozir Jibas SaaS platformasi ustida ishlayapman, unda 10 mingdan ortiq avtomatik test bor.</p>
+          <p data-i18n="about.p3">AI agentlar (Claude Code) bilan ishlashni ish jarayonimga tizimli kiritganman. Shu tajribani taqdimot, master-klass va qo'llanmalarda ulashaman.</p>
 
           <div class="stats">
-            <div class="stat glass reveal d1"><div class="num" data-count="9">0</div><div class="lbl" data-i18n="about.stat_projects">Loyiha</div></div>
-            <div class="stat glass reveal d2"><div class="num" data-count="10">0</div><div class="lbl" data-i18n="about.stat_years">Yil tajriba</div></div>
-            <div class="stat glass reveal d3"><div class="num" data-count="10">0</div><div class="lbl" data-i18n="about.stat_apps">Mobil ilova</div></div>
+            <div class="stat glass reveal d1"><div class="num" data-count="17" data-suffix="">0</div><div class="lbl" data-i18n="about.stat_branches">filialli CRM va LMS</div></div>
+            <div class="stat glass reveal d2"><div class="num" data-count="110" data-suffix="k">0</div><div class="lbl" data-i18n="about.stat_requests">kunlik so'rov</div></div>
+            <div class="stat glass reveal d3"><div class="num" data-count="10000" data-suffix="+">0</div><div class="lbl" data-i18n="about.stat_tests">avtomatik test</div></div>
           </div>
         </div>
 
-        <div class="facts reveal d2">
-          <div class="fact glass">
-            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 6 4-4 4 4M12 2v14M5 14l-2 4a2 2 0 0 0 1.8 3h14.4A2 2 0 0 0 21 18l-2-4"/></svg></span>
-            <div><div class="ft" data-i18n="about.fact_focus">Yo'nalish</div><div class="fv" data-i18n="about.fact_focus_v">Backend &amp; Mobile</div></div>
+        <div class="about-side reveal d2">
+          <div class="about-card glass">
+            <div class="ac-photo"><img src="{% static 'portfolio/img/avatar.jpg' %}" alt="Raximboy Ibrohimov" width="96" height="96" loading="lazy" decoding="async"><span class="ac-dot" aria-hidden="true"></span></div>
+            <div><b>Raximboy Ibrohimov</b><small data-i18n="about.card_role">Full-stack dasturchi · AI agentlar</small></div>
           </div>
-          <div class="fact glass">
-            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
-            <div><div class="ft" data-i18n="about.fact_location">Joylashuv</div><div class="fv" data-i18n="about.fact_location_v">Toshkent, O'zbekiston</div></div>
-          </div>
-          <div class="fact glass">
-            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></span>
-            <div><div class="ft" data-i18n="about.fact_exp">Tajriba</div><div class="fv" data-i18n="about.fact_exp_v">10+ yil</div></div>
-          </div>
-          <div class="fact glass">
-            <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
-            <div><div class="ft" data-i18n="about.fact_learning">O'rganmoqdaman</div><div class="fv">Redis · React Native</div></div>
+          <div class="facts">
+            <div class="fact glass">
+              <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m8 6 4-4 4 4M12 2v14M5 14l-2 4a2 2 0 0 0 1.8 3h14.4A2 2 0 0 0 21 18l-2-4"/></svg></span>
+              <div><div class="ft" data-i18n="about.fact_focus">Yo'nalish</div><div class="fv" data-i18n="about.fact_focus_v">Ta'lim, savdo va SaaS tizimlari</div></div>
+            </div>
+            <div class="fact glass">
+              <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-5.2-7-11a7 7 0 0 1 14 0c0 5.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></span>
+              <div><div class="ft" data-i18n="about.fact_location">Joylashuv</div><div class="fv" data-i18n="about.fact_location_v">Yangiyo'l, Toshkent viloyati</div></div>
+            </div>
+            <div class="fact glass">
+              <span class="fi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></span>
+              <div><div class="ft" data-i18n="about.fact_exp">Tajriba</div><div class="fv" data-i18n="about.fact_exp_v">10+ yil</div></div>
+            </div>
+            <div class="fact glass">
+              <span class="fi">{% include "portfolio/_icon.html" with name="spark" %}</span>
+              <div><div class="ft" data-i18n="about.fact_ai">AI bilan ishlash</div><div class="fv" data-i18n="about.fact_ai_v">Claude Code · agentlar · skill</div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -134,11 +144,15 @@
   <!-- ============================= SKILLS ============================ -->
   <section id="skills">
     <div class="wrap">
-      <div class="kicker reveal" data-i18n="skills.kicker">02 — Texnologiyalar</div>
+      <div class="kicker reveal" data-i18n="skills.kicker">02 · Texnologiyalar</div>
       <h2 class="section-title reveal" data-i18n="skills.title">Ko'nikmalar</h2>
       <p class="section-sub reveal d1" data-i18n="skills.subtitle">Men kundalik ishimda foydalanadigan asboblar</p>
 
       <div class="skills-grid">
+        <div class="skill-card skill-ai glass reveal">
+          <h3><span class="si">{% include "portfolio/_icon.html" with name="spark" %}</span><span data-i18n="skills.h_ai">AI va avtomatlashtirish</span></h3>
+          <div class="chips"><span class="chip">Claude Code</span><span class="chip">AI agentlar</span><span class="chip">Prompt</span><span class="chip">Skill · SKILL.md</span><span class="chip">n8n</span><span class="chip">ChatGPT</span><span class="chip">Gemini</span></div>
+        </div>
         <div class="skill-card glass reveal d1">
           <h3><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m8 18-6-6 6-6M16 6l6 6-6 6"/></svg></span><span data-i18n="skills.h_lang">Dasturlash tillari</span></h3>
           <div class="chips"><span class="chip">Python</span><span class="chip">Dart</span><span class="chip">Swift</span><span class="chip">JavaScript</span><span class="chip">HTML5</span><span class="chip">CSS3</span><span class="chip">SQL</span></div>
@@ -162,7 +176,7 @@
   <!-- =========================== PROJECTS =========================== -->
   <section id="projects">
     <div class="wrap">
-      <div class="kicker reveal" data-i18n="projects.kicker">03 — Ishlarim</div>
+      <div class="kicker reveal" data-i18n="projects.kicker">03 · Ishlarim</div>
       <h2 class="section-title reveal" data-i18n="projects.title">Loyihalar</h2>
       <p class="section-sub reveal d1" data-i18n="projects.subtitle">Men yaratgan va ishtirok etgan loyihalar</p>
       <div class="proj-filters reveal d1" role="tablist">
@@ -172,6 +186,50 @@
         <span class="proj-count mono"><b id="projCount">0</b> <span data-i18n="projects.count">ta loyiha</span></span>
       </div>
       <div class="proj-grid" id="projGrid"><!-- app.js PROJECTS dan render qiladi --></div>
+    </div>
+  </section>
+
+  <!-- ========================= AI QO'LLANMALAR ========================= -->
+  <section id="guides">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="guides.kicker">04 · AI qo'llanmalar</div>
+      <h2 class="section-title reveal" data-i18n="guides.title">AI bilan ishlash: amaliy qo'llanmalar</h2>
+      <p class="section-sub reveal d1" data-i18n="guides.subtitle">Taqdimotim asosida: oddiy tilda, real misollar va tayyor shablonlar bilan.</p>
+
+      <div class="guide-grid">
+        <a class="guide-card guide-feature reveal" href="{% url 'taqdimot' %}">
+          <span class="gc-top"><span class="gc-ico">{% include "portfolio/_icon.html" with name="play" %}</span><span class="gc-kind mono" data-i18n="guides.deck_kind">Taqdimot · 24 slayd</span></span>
+          <h3 data-i18n="guides.deck_title">Sun'iy intellekt: qanday tug'iladi va dunyomizni qanday o'zgartirmoqda</h3>
+          <p data-i18n="guides.deck_text">Ish o'rinlariga ta'siri, kundalik hayotda foydalanish, prompt, agentlar, skill va Telegram yordamchi. Telefonda ham qulay.</p>
+          <span class="gc-go"><span data-i18n="guides.deck_open">Taqdimotni ochish</span>{% include "portfolio/_icon.html" with name="arrow" %}</span>
+        </a>
+        {% for g in guides %}
+        <a class="guide-card glass reveal{% cycle ' d1' ' d2' ' d3' %}" href="{% url 'guide' g.slug %}">
+          <span class="gc-top"><span class="gc-ico">{% include "portfolio/_icon.html" with name=g.icon %}</span><span class="gc-num mono">{{ forloop.counter|stringformat:"02d" }}</span></span>
+          <h3>{{ g.title }}</h3>
+          <p>{{ g.summary }}</p>
+          <span class="gc-meta mono">{{ g.minutes }} <span data-i18n="guides.minutes">daqiqa</span>{% if g.slide %} · {{ g.slide }}-<span data-i18n="guides.slide">slayd</span>{% endif %}</span>
+        </a>
+        {% endfor %}
+      </div>
+      <div class="section-more reveal"><a class="btn btn-ghost" href="{% url 'guides' %}"><span data-i18n="guides.all">Barcha qo'llanmalar</span>{% include "portfolio/_icon.html" with name="arrow" %}</a></div>
+    </div>
+  </section>
+
+  <!-- ========================= AI YANGILIKLAR ========================= -->
+  <section id="news">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="news.kicker">05 · AI yangiliklari</div>
+      <h2 class="section-title reveal" data-i18n="news.title">AI olamidagi so'nggi yangiliklar</h2>
+      <p class="section-sub reveal d1" data-i18n="news.subtitle">OpenAI, Google, The Verge, TechCrunch va o'zbek nashrlaridan avtomatik yig'iladi. Har soatda yangilanadi.</p>
+      {% if news_items %}
+      <div class="news-grid">
+        {% for n in news_items %}{% include "portfolio/_news_card.html" %}{% endfor %}
+      </div>
+      {% else %}
+      <p class="news-empty glass" data-i18n="news.empty">Yangiliklar yig'ilmoqda. Bir necha daqiqadan so'ng sahifani yangilang.</p>
+      {% endif %}
+      <div class="section-more reveal"><a class="btn btn-ghost" href="{% url 'news' %}"><span data-i18n="news.all">Barcha yangiliklar</span>{% include "portfolio/_icon.html" with name="arrow" %}</a></div>
     </div>
   </section>
 

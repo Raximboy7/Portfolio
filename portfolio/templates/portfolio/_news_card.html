@@ -1,0 +1,9 @@
+{% load uz %}<article class="news-card glass" data-region="{{ n.region }}">
+  <div class="nc-top mono"><span class="nc-src">{{ n.source }}</span><time datetime="{{ n.published }}" data-ago>{{ n.published|ago }}</time></div>
+  <h3><a href="{{ n.link }}" target="_blank" rel="noopener nofollow">{{ n.title }}</a></h3>
+  {% if n.summary %}<p>{{ n.summary }}</p>{% endif %}
+  <div class="nc-foot">
+    <span class="nc-tag mono">{% if n.region == "uz" %}UZ{% else %}EN{% endif %}</span>
+    {% if n.region != "uz" %}<a class="nc-tr" href="https://translate.google.com/translate?sl=auto&amp;tl=uz&amp;u={{ n.link|urlencode:'' }}" target="_blank" rel="noopener nofollow" data-i18n="news.translate">Tarjimada o'qish</a>{% endif %}
+  </div>
+</article>

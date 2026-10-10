@@ -48,9 +48,9 @@ const PROJECTS = [
     stack: ["Django", "Docker", "Nginx", "PostgreSQL"], platforms: ["Web"],
     year: 2025, status: "production",
     desc: {
-      uz: "Dasturchilar uchun PaaS: ZIP yoki Git orqali deploy, subdomen, SSL va konteynerlar — bir necha daqiqada jonli sayt.",
-      ru: "PaaS для разработчиков: деплой через ZIP или Git, поддомены, SSL и контейнеры — живой сайт за несколько минут.",
-      en: "PaaS for developers: deploy via ZIP or Git, subdomains, SSL and containers — a live site in minutes.",
+      uz: "Dasturchilar uchun PaaS: ZIP yoki Git orqali deploy, subdomen, SSL va konteynerlar: bir necha daqiqada jonli sayt.",
+      ru: "PaaS для разработчиков: деплой через ZIP или Git, поддомены, SSL и контейнеры: живой сайт за несколько минут.",
+      en: "PaaS for developers: deploy via ZIP or Git, subdomains, SSL and containers: a live site in minutes.",
     },
   },
   {
@@ -111,7 +111,7 @@ const PROJECTS = [
 
   // ---------------------------- Mobil ilovalar ----------------------------
   {
-    key: "boss-student", kind: "app", name: "Boss School — Student", url: "",
+    key: "boss-student", kind: "app", name: "Boss School · Student", url: "",
     type: "Mobile App · IELTS/LMS", role: "Flutter Developer",
     stack: ["Flutter", "Dart", "REST API"], platforms: ["Android", "iOS"],
     year: 2025, status: "production",
@@ -122,18 +122,18 @@ const PROJECTS = [
     },
   },
   {
-    key: "boss-teacher", kind: "app", name: "Boss School — Teacher", url: "",
+    key: "boss-teacher", kind: "app", name: "Boss School · Teacher", url: "",
     type: "Mobile App · Teacher", role: "Flutter Developer",
     stack: ["Flutter", "Dart", "REST API"], platforms: ["Android", "iOS"],
     year: 2025, status: "production",
     desc: {
-      uz: "O'qituvchilar uchun: sinflar, darslar, LMS topshiriqlarini tekshirish, natijalar va reyting — hammasi telefonda.",
-      ru: "Для учителей: классы, уроки, проверка LMS-заданий, результаты и рейтинг — всё в телефоне.",
-      en: "For teachers: classes, lessons, LMS assignment review, results and rating — all on the phone.",
+      uz: "O'qituvchilar uchun: sinflar, darslar, LMS topshiriqlarini tekshirish, natijalar va reyting: hammasi telefonda.",
+      ru: "Для учителей: классы, уроки, проверка LMS-заданий, результаты и рейтинг: всё в телефоне.",
+      en: "For teachers: classes, lessons, LMS assignment review, results and rating: all on the phone.",
     },
   },
   {
-    key: "boss-parent", kind: "app", name: "Boss School — Parent", url: "",
+    key: "boss-parent", kind: "app", name: "Boss School · Parent", url: "",
     type: "Mobile App · Parent", role: "Flutter Developer",
     stack: ["Flutter", "Dart", "Push", "REST API"], platforms: ["Android", "iOS"],
     year: 2025, status: "production",
@@ -144,7 +144,7 @@ const PROJECTS = [
     },
   },
   {
-    key: "aziz-teacher", kind: "app", name: "Aziz Academy — Teacher", url: "",
+    key: "aziz-teacher", kind: "app", name: "Aziz Academy · Teacher", url: "",
     type: "Mobile App · Teacher", role: "Flutter Developer",
     stack: ["Flutter", "Dart", "REST API"], platforms: ["Android", "iOS"],
     year: 2024, status: "production",

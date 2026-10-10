@@ -24,3 +24,6 @@ db.sqlite3-journal
 .idea/
 .DS_Store
 Thumbs.db
+
+# ===== Ma'lumot (yangiliklar keshi) =====
+/data/

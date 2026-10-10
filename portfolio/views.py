@@ -9,12 +9,20 @@ import urllib.error
 import urllib.parse
 import urllib.request
 
+from pathlib import Path
+
 from django.conf import settings
 from django.core.cache import cache
-from django.http import HttpResponse, JsonResponse
+from django.http import Http404, HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.templatetags.static import static
+from django.views.decorators.cache import cache_control
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.gzip import gzip_page
 from django.views.decorators.http import require_POST
+
+from . import guides, news
 
 # ============================================================================
 # SITE — sayt meta ma'lumotlari va ijtimoiy havolalar.
@@ -62,15 +70,88 @@ def _client_ip(request):
     return request.META.get("REMOTE_ADDR", "unknown")
 
 
+def _home_news(limit=6):
+    """Bosh sahifa uchun: eng yangi xabarlar, o'zbekchalari bo'lsa ulardan 2 tasi albatta."""
+    items = news.latest(60)
+    uz = [i for i in items if i["region"] == "uz"][:2]
+    world = [i for i in items if i["region"] != "uz"][: limit - len(uz)]
+    return sorted(uz + world, key=lambda i: i["published"], reverse=True)
+
+
 def index(request):
-    """Bosh sahifa (hero, about, skills, projects)."""
-    return render(request, "portfolio/index.html", {"site": SITE})
+    """Bosh sahifa (hero + taqdimot, about, skills, projects, qo'llanmalar, yangiliklar)."""
+    news.ensure_fresh()
+    return render(request, "portfolio/index.html", {
+        "site": SITE,
+        "page": "home",
+        "guides": guides.all_guides(),
+        "news_items": _home_news(),
+    })
+
+
+# ------------------------------------------------------------------ taqdimot
+DECK_PATH = Path(__file__).resolve().parent / "deck" / "taqdimot.html"
+_deck = {"mtime": None, "html": ""}
+
+
+@gzip_page
+@xframe_options_sameorigin  # bosh sahifadagi jonli ekran (iframe) uchun
+@cache_control(public=True, max_age=900)
+def taqdimot(request):
+    """24 slaydli AI taqdimoti (telefonga moslashgan, ?embed=1 hero uchun)."""
+    mtime = DECK_PATH.stat().st_mtime
+    if _deck["mtime"] != mtime:
+        html = DECK_PATH.read_text(encoding="utf-8")
+        favicon = static("portfolio/img/favicon.svg")
+        _deck["html"] = html.replace("__STATIC__portfolio/img/favicon.svg", favicon)
+        _deck["mtime"] = mtime
+    return HttpResponse(_deck["html"], content_type="text/html; charset=utf-8")
+
+
+# ---------------------------------------------------------------- qo'llanmalar
+def guides_page(request):
+    return render(request, "portfolio/guides.html", {
+        "site": SITE,
+        "page": "guides",
+        "guides": guides.all_guides(),
+    })
+
+
+def guide_detail(request, slug):
+    prev, guide, nxt = guides.get_guide(slug)
+    if guide is None:
+        raise Http404("Qo'llanma topilmadi")
+    return render(request, "portfolio/guide.html", {
+        "site": SITE,
+        "page": "guides",
+        "guide": guide,
+        "prev": prev,
+        "next": nxt,
+    })
+
+
+# ---------------------------------------------------------------- yangiliklar
+def news_page(request):
+    news.ensure_fresh()
+    data = news.load()
+    items = data.get("items", [])[:90]
+    sources = sorted({(i["source"], i["region"]) for i in items})
+    return render(request, "portfolio/news.html", {
+        "site": SITE,
+        "page": "news",
+        "items": items,
+        "updated": data.get("updated"),
+        "count_world": sum(1 for i in items if i["region"] == "world"),
+        "count_uz": sum(1 for i in items if i["region"] == "uz"),
+        "sources_world": [n for n, r in sources if r == "world"],
+        "sources_uz": [f["name"] for f in news.FEEDS if f["region"] == "uz"],
+    })
 
 
 @ensure_csrf_cookie
 def contact_page(request):
     """Alohida aloqa sahifasi. ensure_csrf_cookie — forma uchun CSRF cookie o'rnatadi."""
-    return render(request, "portfolio/contact.html", {"site": SITE})
+    return render(request, "portfolio/contact.html", {"site": SITE, "page": "contact"})
 
 
 def robots_txt(request):
@@ -86,17 +167,17 @@ def robots_txt(request):
 
 
 def sitemap_xml(request):
-    """Bitta sahifali sayt uchun sitemap.xml."""
-    xml = (
-        '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-        f'  <url>\n'
-        f'    <loc>{SITE["url"]}/</loc>\n'
-        f'    <changefreq>monthly</changefreq>\n'
-        f'    <priority>1.0</priority>\n'
-        f'  </url>\n'
-        '</urlset>\n'
+    """Sayt xaritasi: bosh sahifa, taqdimot, qo'llanmalar, yangiliklar, aloqa."""
+    pages = [("/", "weekly", "1.0"), ("/taqdimot/", "monthly", "0.9"), ("/qollanmalar/", "monthly", "0.9")]
+    pages += [(f"/qollanmalar/{g.slug}/", "monthly", "0.8") for g in guides.all_guides()]
+    pages += [("/yangiliklar/", "hourly", "0.7"), ("/aloqa/", "yearly", "0.5")]
+    urls = "".join(
+        f"  <url>\n    <loc>{SITE['url']}{loc}</loc>\n    <changefreq>{freq}</changefreq>\n"
+        f"    <priority>{prio}</priority>\n  </url>\n"
+        for loc, freq, prio in pages
     )
+    xml = ('<?xml version="1.0" encoding="UTF-8"?>\n'
+           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls + "</urlset>\n")
     return HttpResponse(xml, content_type="application/xml")
 
 

@@ -1,0 +1,53 @@
+{% extends "portfolio/base.html" %}
+{% load static uz %}
+
+{% block title %}AI qo'llanmalar · {{ site.name }}{% endblock %}
+{% block description %}AI bilan ishlash bo'yicha amaliy qo'llanmalar: prompt yozish, AI agentlar, Claude skill, bilim bazasi, n8n Telegram bot va xavfsiz foydalanish. O'zbek tilida.{% endblock %}
+{% block og_title %}AI qo'llanmalar · {{ site.name }}{% endblock %}
+{% block og_description %}Prompt, AI agent, skill, bilim bazasi, n8n Telegram bot va xavfsizlik bo'yicha o'zbekcha qo'llanmalar.{% endblock %}
+
+{% block content %}
+  <section class="page-head">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="guides.kicker_page">AI qo'llanmalar</div>
+      <h1 class="section-title reveal" data-i18n="guides.title">AI bilan ishlash: amaliy qo'llanmalar</h1>
+      <p class="section-sub reveal d1" data-i18n="guides.subtitle">Taqdimotim asosida: oddiy tilda, real misollar va tayyor shablonlar bilan.</p>
+
+      <a class="deck-hero reveal" href="{% url 'taqdimot' %}">
+        <span class="dh-text">
+          <span class="gc-kind mono" data-i18n="guides.deck_kind">Taqdimot · 24 slayd</span>
+          <b data-i18n="guides.deck_title">Sun'iy intellekt: qanday tug'iladi va dunyomizni qanday o'zgartirmoqda</b>
+          <span class="dh-parts mono">01 Tanishuv · 02 Imkoniyatlar · 03 Ish dunyosi · 04 Amaliyot · 05 Master-klass</span>
+          <span class="btn btn-primary">{% include "portfolio/_icon.html" with name="play" %}<span data-i18n="guides.deck_open">Taqdimotni ochish</span></span>
+        </span>
+        <span class="dh-art" aria-hidden="true"><small class="mono">Taqdimot · 2026</small><b>Sun’iy<br><em>intellekt</em></b></span>
+      </a>
+
+      <div class="ai-facts">
+        <div class="af glass reveal d1"><b>40%</b><span data-i18n="guides.fact1">ish o'rinlariga AI ta'sir ko'rsatadi</span><small class="mono" data-i18n="guides.src1">XVF, 2024</small></div>
+        <div class="af glass reveal d2"><b>+78 mln</b><span data-i18n="guides.fact2">ish o'rni 2030-yilgacha qo'shiladi (170 mln yangi, 92 mln yo'qoladi)</span><small class="mono" data-i18n="guides.src2">JIF, 2025</small></div>
+        <div class="af glass reveal d3"><b>77%</b><span data-i18n="guides.fact3">ish beruvchilar xodimlarini qayta o'qitishni rejalashtirmoqda</span><small class="mono" data-i18n="guides.src2">JIF, 2025</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap">
+      <div class="guide-grid">
+        {% for g in guides %}
+        <a class="guide-card glass reveal{% cycle ' d1' ' d2' ' d3' %}" href="{% url 'guide' g.slug %}">
+          <span class="gc-top"><span class="gc-ico">{% include "portfolio/_icon.html" with name=g.icon %}</span><span class="gc-num mono">{{ forloop.counter|stringformat:"02d" }}</span></span>
+          <h3>{{ g.title }}</h3>
+          <p>{{ g.summary }}</p>
+          <span class="gc-meta mono">{{ g.minutes }} <span data-i18n="guides.minutes">daqiqa</span>{% if g.slide %} · {{ g.slide }}-<span data-i18n="guides.slide">slayd</span>{% endif %}</span>
+        </a>
+        {% endfor %}
+      </div>
+
+      <div class="cta-band glass reveal">
+        <div><b data-i18n="guides.cta_title">Jamoangiz uchun AI master-klass kerakmi?</b><p data-i18n="guides.cta_text">Agentlar, prompt, skill va avtomatlashtirish bo'yicha amaliy mashg'ulot o'tkazaman.</p></div>
+        <a class="btn btn-primary" href="{% url 'contact' %}"><span data-i18n="guides.cta_btn">Bog'lanish</span>{% include "portfolio/_icon.html" with name="arrow" %}</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

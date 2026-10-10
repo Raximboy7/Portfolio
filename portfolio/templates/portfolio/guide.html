@@ -1,0 +1,51 @@
+{% extends "portfolio/base.html" %}
+{% load static uz %}
+
+{% block title %}{{ guide.title }} · AI qo'llanma{% endblock %}
+{% block description %}{{ guide.summary }}{% endblock %}
+{% block og_title %}{{ guide.title }}{% endblock %}
+{% block og_description %}{{ guide.summary }}{% endblock %}
+{% block extra_head %}<meta property="og:type" content="article">{% endblock %}
+
+{% block content %}
+  <section class="page-head guide-head">
+    <div class="wrap narrow">
+      <nav class="crumbs mono" aria-label="Yo'l"><a href="{% url 'guides' %}" data-i18n="nav.guides">AI qo'llanmalar</a><span aria-hidden="true">/</span><span>{{ guide.title }}</span></nav>
+      <div class="gh-ico">{% include "portfolio/_icon.html" with name=guide.icon %}</div>
+      <h1 class="guide-title">{{ guide.title }}</h1>
+      <p class="guide-lead">{{ guide.summary }}</p>
+      <div class="guide-meta mono">
+        <span>{{ guide.minutes }} <span data-i18n="guides.minutes_read">daqiqa o'qish</span></span>
+        {% if guide.updated %}<span>{{ guide.updated|uzdate }}</span>{% endif %}
+        {% if guide.slide %}<a href="{% url 'taqdimot' %}#{{ guide.slide }}"><span><span data-i18n="guides.in_deck">Taqdimotda</span>: {{ guide.slide }}-<span data-i18n="guides.slide">slayd</span></span>{% include "portfolio/_icon.html" with name="external" %}</a>{% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="page-body guide-body">
+    <div class="wrap narrow guide-layout">
+      {% if guide.toc %}
+      <details class="toc glass" open>
+        <summary class="mono" data-i18n="guides.toc">Mundarija</summary>
+        <ul>{% for id, name in guide.toc %}<li><a href="#{{ id }}">{{ name|safe }}</a></li>{% endfor %}</ul>
+      </details>
+      {% endif %}
+      <article class="article" id="article">
+        {{ guide.html|safe }}
+      </article>
+
+      <nav class="guide-nav" aria-label="Qo'llanmalar">
+        {% if prev %}<a class="gn prev glass" href="{% url 'guide' prev.slug %}"><small class="mono" data-i18n="guides.prev">Oldingi</small><b>{{ prev.title }}</b></a>{% else %}<span></span>{% endif %}
+        {% if next %}<a class="gn next glass" href="{% url 'guide' next.slug %}"><small class="mono" data-i18n="guides.next">Keyingi</small><b>{{ next.title }}</b></a>{% endif %}
+      </nav>
+
+      <div class="cta-band glass">
+        <div><b data-i18n="guides.cta2_title">Savolingiz bormi?</b><p data-i18n="guides.cta2_text">Telegram'da yozing yoki to'liq taqdimotni ko'ring.</p></div>
+        <div class="cta-actions">
+          <a class="btn btn-ghost" href="{% url 'taqdimot' %}">{% include "portfolio/_icon.html" with name="play" %}<span data-i18n="hero.cta_deck">Taqdimotni ko'rish</span></a>
+          <a class="btn btn-primary" href="{{ site.telegram }}" target="_blank" rel="noopener">Telegram{% include "portfolio/_icon.html" with name="arrow" %}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

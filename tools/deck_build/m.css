@@ -1,0 +1,42 @@
+
+/* ===== Telefon (portret) rejimi: html.m ===== */
+.mv,.mvi{display:contents}
+html.m #viewport{align-items:flex-start;justify-content:flex-start}
+html.m #stage{width:var(--mw);height:var(--mh);transform-origin:0 0;box-shadow:none}
+html.m .slide{width:var(--mw);height:var(--mh);padding:var(--pt) 44px var(--pb)!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:18px;row-gap:24px;align-content:start;overflow:hidden}
+html.m .slide.m-c{align-content:center}
+html.m .slide.m-over{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+html.m .slide.m-over::-webkit-scrollbar{display:none}
+html.m .slide>*{position:relative!important;left:auto!important;top:auto!important;right:auto!important;bottom:auto!important;width:auto!important;height:auto!important;max-width:100%;min-width:0;grid-column:1/-1;order:var(--mo,500);margin:0}
+html.m .slide>.m-half{grid-column:auto}
+html.m .slide>.m-keep{width:176px!important;height:176px!important;justify-self:start}
+html.m .m-hide{display:none!important}
+html.m .mv{display:block;position:relative!important}
+html.m .mvi{display:block;position:absolute;left:0;top:0;transform-origin:0 0}
+html.m .mvi>*{position:absolute!important;left:var(--il)!important;top:var(--it)!important;width:calc(100% - var(--il) - var(--ir))!important;height:calc(100% - var(--it) - var(--ib))!important;margin:0}
+html.m .m-inset{position:absolute!important;left:var(--il)!important;right:var(--ir)!important;top:var(--it)!important;bottom:auto!important}
+html.m .slide p{overflow-wrap:break-word}
+html.m .m-fw{width:auto!important;max-width:100%}
+html.m .slide>div:has(>div[style*="border-radius:999px"]){flex-wrap:wrap}
+/* tipografika */
+html.m .slide h2{font-size:56px!important;line-height:1.06!important;letter-spacing:-1px!important}
+html.m .slide p[style*="letter-spacing:4px"]{font-size:21px!important;letter-spacing:3px!important}
+html.m .slide [style*="font-size:24px"]{font-size:25px!important}
+html.m .m-src p{font-size:19px!important;letter-spacing:1.5px!important;line-height:1.4!important}
+html.m .m-src>p:nth-child(2){display:none}
+/* boshqaruv */
+html.m #ui{left:50%;right:auto;transform:translateX(-50%);bottom:10px;padding:4px;gap:2px}
+html.m #ui.hide{opacity:1;pointer-events:auto}
+html.m #ui button{width:44px;height:44px}
+html.m #notes{left:10px;right:10px;bottom:68px;max-height:52vh;overflow:auto;font-size:16px;padding:16px 18px}
+#mmore{display:none}
+html.m #mmore.on{position:fixed;left:50%;bottom:66px;width:34px;height:34px;margin-left:-17px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(17,26,51,.82);color:#EEF2FF;z-index:11;pointer-events:none;animation:mmB 1.6s ease-in-out infinite}
+@keyframes mmB{50%{transform:translateY(5px)}}
+html.embed #mmore,html.embed #ui,html.embed #hint,html.embed #notes{display:none!important}
+html.paused *,html.paused *:before,html.paused *:after{animation-play-state:paused!important}
+/*SLIDE-CSS*/
+#ui a{all:unset;cursor:pointer;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#9AA6C6;transition:background .2s,color .2s}
+#ui a:hover{background:rgba(238,242,255,.1);color:#EEF2FF}
+#ui a:focus-visible{outline:2px solid #3EE6F0;outline-offset:2px}
+html.m #ui a{width:44px;height:44px}
+html.m #hint{display:block;top:14px;bottom:auto;font-size:12px;padding:8px 14px}

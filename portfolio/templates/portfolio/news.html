@@ -1,0 +1,43 @@
+{% extends "portfolio/base.html" %}
+{% load static uz %}
+
+{% block title %}AI yangiliklari · {{ site.name }}{% endblock %}
+{% block description %}Sun'iy intellekt olamidagi so'nggi yangiliklar: OpenAI, Google, DeepMind, The Verge, TechCrunch va o'zbek nashrlaridan har soatda avtomatik yig'iladi.{% endblock %}
+{% block og_title %}AI yangiliklari · {{ site.name }}{% endblock %}
+{% block og_description %}OpenAI, Google, TechCrunch, The Verge va o'zbek nashrlaridan AI yangiliklari, har soatda yangilanadi.{% endblock %}
+
+{% block content %}
+  <section class="page-head">
+    <div class="wrap">
+      <div class="kicker reveal" data-i18n="news.kicker_page">AI yangiliklari</div>
+      <h1 class="section-title reveal" data-i18n="news.title">AI olamidagi so'nggi yangiliklar</h1>
+      <p class="section-sub reveal d1"><span data-i18n="news.subtitle">OpenAI, Google, The Verge, TechCrunch va o'zbek nashrlaridan avtomatik yig'iladi. Har soatda yangilanadi.</span>{% if updated %} <span class="news-upd mono"><span data-i18n="news.updated">Yangilandi</span>: <time datetime="{{ updated }}" data-ago>{{ updated|ago }}</time></span>{% endif %}</p>
+
+      <div class="proj-filters news-filters reveal d1" role="group" aria-label="Filtr">
+        <button type="button" data-news-filter="all" class="on" aria-pressed="true"><span data-i18n="news.f_all">Hammasi</span> <small class="mono">{{ items|length }}</small></button>
+        <button type="button" data-news-filter="world" aria-pressed="false"><span data-i18n="news.f_world">Dunyo</span> <small class="mono">{{ count_world }}</small></button>
+        <button type="button" data-news-filter="uz" aria-pressed="false"><span data-i18n="news.f_uz">O'zbekiston</span> <small class="mono">{{ count_uz }}</small></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="page-body">
+    <div class="wrap">
+      {% if items %}
+      <div class="news-grid news-list" id="newsList">
+        {% for n in items %}{% include "portfolio/_news_card.html" %}{% endfor %}
+      </div>
+      <p class="news-none glass" id="newsNone" hidden data-i18n="news.none">Bu bo'limda hozircha yangilik yo'q. O'zbek nashrlaridagi AI xabarlari paydo bo'lishi bilan shu yerda chiqadi.</p>
+      {% else %}
+      <p class="news-empty glass" data-i18n="news.empty">Yangiliklar yig'ilmoqda. Bir necha daqiqadan so'ng sahifani yangilang.</p>
+      {% endif %}
+
+      <div class="news-src glass">
+        <p><b data-i18n="news.src_title">Manbalar</b></p>
+        <p class="mono"><span data-i18n="news.f_world">Dunyo</span>: {{ sources_world|join:", " }}</p>
+        <p class="mono"><span data-i18n="news.f_uz">O'zbekiston</span>: {{ sources_uz|join:", " }} <span data-i18n="news.src_uz_note">(faqat AI haqidagi xabarlar)</span></p>
+        <p class="news-note" data-i18n="news.note">Sarlavha va qisqa mazmun manbaning o'ziga tegishli; to'liq matnni manba saytida o'qing.</p>
+      </div>
+    </div>
+  </section>
+{% endblock %}

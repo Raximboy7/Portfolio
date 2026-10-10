@@ -1,0 +1,46 @@
+/* --- slaydma-slayd mobil sozlash --- */
+html.m #cover h1{font-size:110px!important;letter-spacing:-3px!important;line-height:.98!important}
+html.m #cover p[data-o="3"]{font-size:32px!important}
+html.m #men-haqimda{grid-template-columns:150px minmax(0,1fr)!important}
+html.m #men-haqimda>.m-keep{width:208px!important;height:208px!important;scale:.654;transform-origin:0 0;margin:0 -72px -72px 0!important;grid-column:1!important}
+html.m #men-haqimda>h2{grid-column:2!important;align-self:center;font-size:58px!important}
+html.m #men-haqimda>.m-stat{flex-direction:row!important;align-items:center;gap:22px!important;padding:18px 26px!important}
+html.m #men-haqimda>.m-stat>p:first-child{font-size:54px!important;min-width:196px}
+html.m #men-haqimda>.m-stat>p:last-child{font-size:25px!important}
+html.m #men-haqimda [style*="font-size:22px"]{font-size:20px!important;letter-spacing:2px!important}
+html.m #ai-nima>p[data-o="2"]{font-size:35px!important}
+html.m #sohalar>[data-b="pop"]{padding:20px!important;gap:12px!important}
+html.m #sohalar>[data-b="pop"]>div:first-child{width:50px!important;height:50px!important}
+html.m #sohalar>[data-b="pop"]>div:first-child svg{width:28px!important;height:28px!important}
+html.m #sohalar>[data-b="pop"] p[style*="font-size:30px"]{font-size:28px!important}
+html.m #qirq-foiz p.cnt{font-size:230px!important;line-height:.95!important}
+html.m #qirq-foiz>p[data-o="3"]{font-size:34px!important}
+html.m #yangi-kasblar>[data-b="pop"]{padding:20px!important}
+html.m #yangi-kasblar>[data-b="pop"] p[style*="font-size:30px"]{font-size:28px!important}
+html.m #esda>[data-b="rise"]{padding:26px!important;gap:12px!important}
+html.m #esda>[data-b="rise"]>div:first-child{height:90px!important}
+html.m #esda .m-inset{left:26px!important;top:26px!important;scale:.643;transform-origin:0 0}
+html.m #esda h3{font-size:38px!important}
+html.m #mk-cover h1{font-size:88px!important;letter-spacing:-2px!important}
+html.m #mk-cover>p[data-o="3"]{font-size:31px!important}
+html.m #mk-amaliyot>.m-step{padding:22px 26px!important;gap:10px!important}
+html.m #mk-amaliyot>.m-step p[style*="font-size:36px"]{font-size:33px!important}
+html.m #mk-amaliyot>.m-box{padding:22px 26px!important;gap:12px!important}
+html.m #yakun h2{font-size:132px!important;letter-spacing:-3px!important;line-height:1!important}
+html.m .slide .cnt{white-space:nowrap}
+html.m #kasblar .m-list>div{padding-top:11px!important;padding-bottom:11px!important}
+html.m #kasblar .m-list>div:first-child{padding-top:0!important}
+html.m #yangi-kasblar>.m-ring{font-size:26px!important;line-height:1.3!important}
+html.m #yangi-kasblar>[data-b="pop"]{padding:18px 20px!important;gap:6px!important}
+html.m #yangi-kasblar>[data-b="pop"] p[style*="font-size:24px"]{font-size:23px!important}
+html.m #mk-cover .m-agenda{padding:26px 30px 18px!important}
+html.m #mk-cover .m-agenda>div[data-b]{padding:8px 0!important}
+html.m #mk-amaliyot>.m-step>div:first-child>p:first-child{width:44px!important;height:44px!important}
+html.m .slide>div>div[style*="border-radius:999px"]{padding:12px 18px!important;gap:10px!important}
+html.m .slide>div>div[style*="border-radius:999px"] p[style*="font-size:28px"]{font-size:25px!important}
+html.m #men-haqimda>.m-stat>p:first-child{white-space:nowrap}
+html.m #men-haqimda>.m-stat{padding:14px 24px!important}
+html.m #yangi-kasblar>.m-ring{font-size:25px!important}
+html.m #mk-amaliyot{row-gap:16px}
+html.m #mk-amaliyot>.m-step>p{font-size:26px!important}
+html.m #mk-amaliyot>.m-box p[style*="font-size:26px"],html.m #mk-amaliyot>.m-box p[style*="font-size:27px"]{font-size:25px!important}
