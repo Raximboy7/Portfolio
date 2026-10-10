@@ -6,7 +6,7 @@
 .mv,.mvi{display:contents}
 html.m #viewport{align-items:flex-start;justify-content:flex-start}
 html.m #stage{width:var(--mw);height:var(--mh);transform-origin:0 0;box-shadow:none}
-html.m .slide{width:var(--mw);height:var(--mh);padding:var(--pt) 44px var(--pb)!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:18px;row-gap:24px;align-content:start;overflow:hidden}
+html.m .slide{width:var(--mw);height:var(--mh);transform-origin:0 0;padding:var(--pt) calc(44px * var(--f,1)) var(--pb)!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:18px;row-gap:24px;align-content:start;overflow:hidden}
 html.m .slide.m-c{align-content:center}
 html.m .slide.m-over{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 html.m .slide.m-over::-webkit-scrollbar{display:none}

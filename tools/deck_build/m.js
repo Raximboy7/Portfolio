@@ -1,6 +1,6 @@
 /* ===== Telefon / portret rejimi: slaydlar bir ustunda qayta joylanadi ===== */
 var root=document.documentElement,QS=new URLSearchParams(location.search),FM=QS.get('m'),EMBED=QS.get('embed')==='1';
-var M=false,MW=720,MH=1280,K=1,INS=[];
+var M=false,MW=720,MH=1280,K=1,PT=48,PB=126,INS=[];
 if(EMBED)root.classList.add('embed');
 function wantM(){if(FM==='1')return true;if(FM==='0')return false;var w=innerWidth,h=innerHeight;return EMBED?w<h*1.1:(w<h*1.1||w<=560);}
 function dpx(st,k){var m=new RegExp('(?:^|;)\\s*'+k+'\\s*:\\s*(-?[\\d.]+)px').exec(st||'');return m?+m[1]:null;}
@@ -60,8 +60,7 @@ function prepM(){
 }
 function flowB(s){var mb=0;[].forEach.call(s.children,function(el){var c=getComputedStyle(el);if(c.display==='none'||c.position==='absolute'||c.position==='fixed')return;var b=el.offsetTop+el.offsetHeight;if(b>mb)mb=b;});return mb;}
 function setMI(mv,w,h,sc,x){var i=mv.firstChild;i.style.width=w+'px';i.style.height=h+'px';i.style.transform='translate('+x+'px,0) scale('+sc+')';}
-function layM(s){
-  if(!M||!s)return;
+function lay1(s){
   var mvs=s._mvs||[],cs=getComputedStyle(s),pt=parseFloat(cs.paddingTop)||0,pb=parseFloat(cs.paddingBottom)||0;
   s.classList.remove('m-c','m-over');s.scrollTop=0;
   mvs.forEach(function(mv){mv.style.setProperty('height','0px','important');});
@@ -78,14 +77,30 @@ function layM(s){
     }
     mv.style.setProperty('height',vh+'px','important');tot+=vh;
   });
-  s.classList.add(tot<=avail+6?'m-c':'m-over');
+  return {tot:tot,avail:avail};
+}
+/* Slayd sig'masa: mantiqiy o'lchamni f marta kattalashtirib, scale(1/f) bilan ekranga qaytaramiz
+   (matn ko'pi bilan 1/FITMAX ga kichrayadi). Shunda past ekranlarda ham scroll kerak bo'lmaydi. */
+function fitReset(s){['--mw','--mh','--pt','--pb','--f'].forEach(function(k){s.style.removeProperty(k);});s.style.removeProperty('scale');s._f=1;}
+function layM(s){
+  if(!M||!s)return;
+  fitReset(s);
+  var r=lay1(s),f=1,FITMAX=EMBED?1.7:1.25;
+  for(var i=0;i<4&&r.tot>r.avail+6&&f<FITMAX;i++){
+    f=Math.min(FITMAX,f*Math.max(1.02,(r.tot+6)/r.avail));
+    setv(s,{'--mw':MW*f+'px','--mh':MH*f+'px','--pt':PT*f+'px','--pb':PB*f+'px','--f':f});
+    s.style.scale=String(1/f);
+    r=lay1(s);
+  }
+  s._f=f;
+  s.classList.add(r.tot<=r.avail+6?'m-c':'m-over');
   moreUpd(s);
 }
 var MORE=document.createElement('div');MORE.id='mmore';MORE.setAttribute('aria-hidden','true');MORE.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';document.body.appendChild(MORE);
 function moreUpd(s){MORE.classList.toggle('on',!!(M&&s&&s===S[cur]&&s.classList.contains('m-over')&&s.scrollTop+s.clientHeight<s.scrollHeight-24));}
 function applyM(on){
   M=on;root.classList.toggle('m',on);moveIns(on);
-  if(!on)S.forEach(function(s){s.classList.remove('m-c','m-over');(s._mvs||[]).forEach(function(mv){mv.style.removeProperty('height');var i=mv.firstChild;i.style.width=i.style.height=i.style.transform='';});});
+  if(!on)S.forEach(function(s){fitReset(s);s.classList.remove('m-c','m-over');(s._mvs||[]).forEach(function(mv){mv.style.removeProperty('height');var i=mv.firstChild;i.style.width=i.style.height=i.style.transform='';});});
 }
 /*MCF*/
 prepM();
