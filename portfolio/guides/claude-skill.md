@@ -14,7 +14,7 @@ Masalan, tashkilot nomidan rasmiy xat qanday yozilishi: tuzilma, uslub va tekshi
 
 ## 1. Yoqing
 
-**Settings → Capabilities** bo‘limida **“Code execution and file creation”** imkoniyatini yoqing. Skill’lar shu imkoniyat orqali ishlaydi.
+**Settings → Capabilities** bo‘limida **“Code execution and file creation”** imkoniyatini yoqing. Skill’lar shu imkoniyat orqali ishlaydi. Team va Enterprise tariflarida bu sozlamani avval tashkilot egasi yoqadi.
 
 ## 2. Yozing
 
@@ -38,7 +38,9 @@ description: Rasmiy yoki javob xati yozishda ishlat.
 
 ## 3. Yuklang
 
-Papkani **ZIP** qiling, so‘ng **Customize → Skills → + → Create skill** orqali yuklang.
+Papkani **ZIP** qiling, so‘ng **Customize → Skills → + → Create skill → Upload a skill** orqali yuklang.
+
+> **Papka nomi skill nomi bilan bir xil bo‘lsin** (`name: agentlik-rasmiy-xat` bo‘lsa, papka ham `agentlik-rasmiy-xat`). Nom mos kelmasa yoki `SKILL.md` topilmasa, yuklash xato bilan to‘xtaydi.
 
 ## 4. Sinang
 

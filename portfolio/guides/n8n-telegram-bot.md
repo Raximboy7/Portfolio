@@ -18,7 +18,7 @@ Bugun yig‘adigan zanjirimiz uch qismdan iborat:
 
 ## 1. O‘rnating
 
-Kompyuterda Node.js o‘rnatilgan bo‘lsa, terminalda bitta buyruq yetarli:
+Kompyuterda Node.js (20.19 dan 24 gacha versiya) o‘rnatilgan bo‘lsa, terminalda bitta buyruq yetarli:
 
 ```bash
 npx n8n
@@ -55,5 +55,9 @@ Zanjirni faollashtiring. Endi bot murojaatni qabul qiladi, jadvalga yozadi va ja
 ## Kun-u tun ishlashi uchun
 
 - `npx n8n` kompyuteringiz yoqiq turgandagina ishlaydi. Bot 24/7 ishlashi uchun n8n’ni doimiy yoqiq serverga (VPS) o‘rnating.
-- Telegram Trigger webhook orqali ishlaydi: n8n internetdan ochiq HTTPS manzilda bo‘lishi kerak. Serverda bu odatiy holat; o‘z kompyuteringizda sinash uchun tunnel (masalan, Cloudflare Tunnel yoki ngrok) kerak bo‘ladi.
+- Telegram Trigger webhook orqali ishlaydi va Telegram faqat ochiq HTTPS manzilni qabul qiladi (`localhost` ishlamaydi). Serverda bu odatiy holat. O‘z kompyuteringizda sinash uchun tunnel oching (masalan, Cloudflare Tunnel yoki ngrok) va n8n’ga shu manzilni ayting:
+
+```bash
+WEBHOOK_URL=https://sizning-tunnel-manzilingiz npx n8n
+```
 - Jadvalga shaxsiy ma’lumot yozilsa, unga kirish huquqini cheklang.
