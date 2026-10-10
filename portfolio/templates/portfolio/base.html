@@ -8,7 +8,7 @@
 
   <meta name="description" content="{% block description %}Raximboy Ibrohimov: full-stack dasturchi (Python · Django · Flutter). AI bo'yicha taqdimot, amaliy qo'llanmalar, AI yangiliklari va loyihalar.{% endblock %}">
   <meta name="author" content="{{ site.name }}">
-  <meta name="theme-color" content="#0a0a0b">
+  <meta name="theme-color" content="#070b19">
   <meta property="og:type" content="website">
   <meta property="og:title" content="{% block og_title %}{{ site.name }} · Full-stack dasturchi va AI qo'llanmalar{% endblock %}">
   <meta property="og:description" content="{% block og_description %}Full-stack dasturchi · Python · Django · Flutter · AI agentlar{% endblock %}">
@@ -19,7 +19,7 @@
   <link rel="icon" type="image/svg+xml" href="{% static 'portfolio/img/favicon.svg' %}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Manrope:wght@400..800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
 
   <script>
@@ -29,7 +29,7 @@
     })();
   </script>
 </head>
-<body id="top">
+<body id="top" data-page="{{ page|default:'' }}">
 
   <!-- fon effektlari -->
   <div class="grid-bg" aria-hidden="true"></div>

@@ -40,7 +40,12 @@ s = once('<meta name="viewport" content="width=device-width, initial-scale=1">\n
  '<meta property="og:title" content="Sun\u2019iy intellekt \u00b7 taqdimot">\n'
  '<meta property="og:description" content="AI qanday tug\u2018iladi, ish o\u2018rinlariga ta\u2019siri va undan amalda foydalanish: prompt, agentlar, skill, Telegram yordamchi.">\n'
  '<meta property="og:url" content="https://ibrohimov-dev.uz/taqdimot/">\n'
+ '<meta property="og:image" content="https://ibrohimov-dev.uz/static/portfolio/img/portret.jpg">\n'
  '<link rel="icon" type="image/svg+xml" href="__STATIC__portfolio/img/favicon.svg">\n', s)
+
+# --- 2d) "Men haqimda" slaydi: IR o'rniga rasmiy portret (topilmasa IR qoladi)
+s = once('color:#FFFFFF">IR</p></div>',
+         'color:#FFFFFF">IR</p><img class="me-photo" src="__STATIC__portfolio/img/portret.jpg" alt="Ibrohimov Raximboy" decoding="async" onerror="this.remove()"></div>', s)
 
 # --- 3) srcdoc patches
 def patch_srcdoc(text, sid, pairs):

@@ -102,8 +102,8 @@ def taqdimot(request):
     mtime = DECK_PATH.stat().st_mtime
     if _deck["mtime"] != mtime:
         html = DECK_PATH.read_text(encoding="utf-8")
-        favicon = static("portfolio/img/favicon.svg")
-        _deck["html"] = html.replace("__STATIC__portfolio/img/favicon.svg", favicon)
+        # "__STATIC__portfolio/img/x.svg" -> /static/portfolio/img/x.<hash>.svg
+        _deck["html"] = re.sub(r"__STATIC__([\w./-]+)", lambda m: static(m.group(1)), html)
         _deck["mtime"] = mtime
     return HttpResponse(_deck["html"], content_type="text/html; charset=utf-8")
 

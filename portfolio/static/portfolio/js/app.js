@@ -51,7 +51,7 @@
     localStorage.setItem("theme", theme);
     document.documentElement.setAttribute("data-theme", theme);
     const meta = $('meta[name="theme-color"]');
-    if (meta) meta.setAttribute("content", theme === "light" ? "#f4f4f5" : "#0a0a0b");
+    if (meta) meta.setAttribute("content", theme === "light" ? "#f5f7fc" : "#070b19");
   }
   function toggleTheme() { applyTheme(theme === "dark" ? "light" : "dark"); }
 
@@ -252,7 +252,7 @@
       ctx.fillRect(0, 0, W, H);
       ctx.globalCompositeOperation = "source-over";
       const light = document.documentElement.getAttribute("data-theme") === "light";
-      ctx.fillStyle = light ? "rgba(10,10,11,0.85)" : "rgba(255,255,255,0.9)";
+      ctx.fillStyle = light ? "rgba(29,95,216,0.62)" : "rgba(124,176,255,0.85)";   // taqdimot ko'k rangi
       for (let i = 0; i < cols; i++) {
         drops[i] += speeds[i];
         const y = Math.floor(drops[i]) * FS;

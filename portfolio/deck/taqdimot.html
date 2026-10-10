@@ -9,6 +9,7 @@
 <meta property="og:title" content="Sun’iy intellekt · taqdimot">
 <meta property="og:description" content="AI qanday tug‘iladi, ish o‘rinlariga ta’siri va undan amalda foydalanish: prompt, agentlar, skill, Telegram yordamchi.">
 <meta property="og:url" content="https://ibrohimov-dev.uz/taqdimot/">
+<meta property="og:image" content="https://ibrohimov-dev.uz/static/portfolio/img/portret.jpg">
 <link rel="icon" type="image/svg+xml" href="__STATIC__portfolio/img/favicon.svg">
 <title>Sun’iy intellekt · taqdimot</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -163,6 +164,9 @@ html,body{margin:0;height:100%;overflow:hidden;background:#04070F;color:#EEF2FF;
 #hint.hide{opacity:0}
 @media (max-width:700px){#hint{display:none}#ui{right:50%;transform:translateX(50%);bottom:12px}#notes{bottom:64px;font-size:15px}}
 
+/* "Men haqimda" slaydidagi portret (gradient halqa ichida) */
+.me-photo{position:absolute;left:6px;top:6px;width:calc(100% - 12px);height:calc(100% - 12px);border-radius:50%;object-fit:cover;object-position:50% 30%;background:#fff}
+
 /* ===== Telefon (portret) rejimi: html.m ===== */
 .mv,.mvi{display:contents}
 html.m #viewport{align-items:flex-start;justify-content:flex-start}
@@ -287,7 +291,7 @@ requestAnimationFrame(tick);
 </section>
 <section class="slide light" id="men-haqimda" data-transition="fade" style="background:#0A1024;color:#111827;font-family:'Manrope', Tahoma, sans-serif;font-weight:500;padding:128px 128px 160px;display:flex;flex-direction:column">
 <p data-b="fade" data-o="1" style="position:absolute;left:128px;top:120px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:24px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#1D5FD8">Men haqimda</p>
-<div data-b="scale" data-o="2" style="position:absolute;left:128px;top:200px;width:208px;height:208px"><svg class="dd-spin" viewBox="0 0 208 208" style="position:absolute;inset:0;width:208px;height:208px" fill="none" aria-hidden="true"><circle cx="104" cy="104" r="100" stroke="#4D8DFF" stroke-width="3" stroke-dasharray="4 12" stroke-linecap="round"/></svg><div style="position:absolute;left:16px;top:16px;width:176px;height:176px;border-radius:50%;background:linear-gradient(135deg,#4D8DFF 0%,#A78BFA 55%,#F472B6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(77,141,255,.35)"><p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;letter-spacing:-2px;color:#FFFFFF">IR</p></div></div>
+<div data-b="scale" data-o="2" style="position:absolute;left:128px;top:200px;width:208px;height:208px"><svg class="dd-spin" viewBox="0 0 208 208" style="position:absolute;inset:0;width:208px;height:208px" fill="none" aria-hidden="true"><circle cx="104" cy="104" r="100" stroke="#4D8DFF" stroke-width="3" stroke-dasharray="4 12" stroke-linecap="round"/></svg><div style="position:absolute;left:16px;top:16px;width:176px;height:176px;border-radius:50%;background:linear-gradient(135deg,#4D8DFF 0%,#A78BFA 55%,#F472B6 100%);display:flex;align-items:center;justify-content:center;box-shadow:0 20px 50px rgba(77,141,255,.35)"><p style="font-family:'Space Grotesk', Arial, sans-serif;font-size:72px;font-weight:700;letter-spacing:-2px;color:#FFFFFF">IR</p><img class="me-photo" src="__STATIC__portfolio/img/portret.jpg" alt="Ibrohimov Raximboy" decoding="async" onerror="this.remove()"></div></div>
 <h2 data-b="rise" data-o="2" style="position:absolute;left:390px;top:206px;width:1400px;font-family:'Space Grotesk', Arial, sans-serif;font-size:84px;line-height:1.05;letter-spacing:-2px;color:#111827;font-weight:700">Ibrohimov <span style="color:#1D5FD8">Raximboy</span></h2>
 <p data-b="fade" data-o="3" style="position:absolute;left:390px;top:310px;width:1400px;font-size:34px;line-height:1.35;color:#4B5563">Full-stack dasturchi: Python, Django, Flutter, React va serverlar</p>
 <p data-b="fade" data-o="3" style="position:absolute;left:390px;top:372px;width:1400px;font-family:'JetBrains Mono', 'Courier New', monospace;font-size:22px;letter-spacing:3px;color:#6B7280">1996 · YANGIYO‘L, TOSHKENT VILOYATI · GITHUB.COM/RAXIMBOY7</p>

@@ -1,4 +1,7 @@
 
+/* "Men haqimda" slaydidagi portret (gradient halqa ichida) */
+.me-photo{position:absolute;left:6px;top:6px;width:calc(100% - 12px);height:calc(100% - 12px);border-radius:50%;object-fit:cover;object-position:50% 30%;background:#fff}
+
 /* ===== Telefon (portret) rejimi: html.m ===== */
 .mv,.mvi{display:contents}
 html.m #viewport{align-items:flex-start;justify-content:flex-start}
