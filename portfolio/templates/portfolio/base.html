@@ -15,6 +15,7 @@
   <meta property="og:url" content="{{ site.url }}{{ request.path }}">
   {% block extra_head %}{% endblock %}
   <meta property="og:image" content="{{ site.url }}{% static 'portfolio/img/avatar.jpg' %}">
+  <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "{{ site.name }}", "url": "{{ site.url }}", "jobTitle": "{{ site.role }}", "sameAs": ["{{ site.telegram }}", "{{ site.github }}", "{{ site.linkedin }}", "{{ site.instagram }}"]}</script>
 
   <link rel="icon" type="image/svg+xml" href="{% static 'portfolio/img/favicon.svg' %}">
   <link rel="stylesheet" href="{% static 'portfolio/css/style.css' %}">
@@ -69,6 +70,7 @@
         <a href="{{ site.github }}" target="_blank" rel="noopener">GitHub ↗</a>
         <a href="{{ site.linkedin }}" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="{{ site.telegram }}" target="_blank" rel="noopener">Telegram ↗</a>
+        <a href="{{ site.instagram }}" target="_blank" rel="noopener">Instagram ↗</a>
         <a href="#top"><span data-i18n="footer.back">Yuqoriga</span> ↑</a>
       </div>
     </div>

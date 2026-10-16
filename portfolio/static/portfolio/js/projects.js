@@ -54,6 +54,17 @@ const PROJECTS = [
     },
   },
   {
+    key: "geoecofauna", kind: "web", name: "Geoekofauna", url: "https://geoecofauna.uz",
+    type: "Ecology · Species Catalog", role: "Backend & DevOps Developer",
+    stack: ["React", "Vite", "Node.js", "SQLite", "Nginx"], platforms: ["Web"],
+    year: 2026, status: "production",
+    desc: {
+      uz: "O'zbekiston biologik xilma-xilligi katalogi: Qizil kitobdagi 206 ta himoyalangan tur, biom modullari, muhofaza kodlari va Qor barsi dasturi, uch tilda.",
+      ru: "Каталог биоразнообразия Узбекистана: 206 охраняемых видов из Красной книги, модули биомов, коды охраны и программа «Снежный барс», три языка.",
+      en: "Uzbekistan biodiversity catalog: 206 Red Book protected species, biome modules, conservation codes and a Snow Leopard program, three languages.",
+    },
+  },
+  {
     key: "devnest", kind: "web", name: "DevNest", url: "https://devnest.uz",
     type: "PaaS · Hosting", role: "Founder & Backend Developer",
     stack: ["Django", "Docker", "Nginx", "PostgreSQL"], platforms: ["Web"],

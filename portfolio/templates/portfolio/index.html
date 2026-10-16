@@ -125,6 +125,7 @@
       <a class="btn primary" href="{{ site.telegram }}" target="_blank" rel="noopener"><span data-i18n="contact.tg">Telegram'da yozish</span> <span aria-hidden="true">↗</span></a>
       <a class="btn" href="mailto:{{ site.email }}"><span data-i18n="contact.mail">Email yuborish</span> <span aria-hidden="true">↗</span></a>
       <a class="contact-form-link" href="{% url 'contact' %}" data-i18n="contact.form_link">yoki sayt orqali xabar qoldiring</a>
+      {% include "portfolio/_socials.html" %}
     </div>
   </div>
 
@@ -135,6 +136,7 @@
       "alaziz-academy": { logo: "{% static 'portfolio/img/projects/alaziz-academy.png' %}", shot: "{% static 'portfolio/img/shots/alaziz-academy.jpg' %}" },
       "jibas": { logo: "{% static 'portfolio/img/projects/jibas.png' %}", shot: "{% static 'portfolio/img/shots/jibas.jpg' %}" },
       "sarrax": { logo: "{% static 'portfolio/img/projects/sarrax.png' %}", shot: "{% static 'portfolio/img/shots/sarrax.jpg' %}" },
+      "geoecofauna": { logo: "{% static 'portfolio/img/projects/geoecofauna.png' %}", shot: "{% static 'portfolio/img/shots/geoecofauna.jpg' %}" },
       "devnest": { logo: "{% static 'portfolio/img/projects/devnest.svg' %}", shot: "{% static 'portfolio/img/shots/devnest.jpg' %}" },
       "bozorlink": { logo: "{% static 'portfolio/img/projects/bozorlink.svg' %}", shot: "{% static 'portfolio/img/shots/bozorlink.jpg' %}" },
       "nevio": { logo: "{% static 'portfolio/img/projects/nevio.png' %}", shot: "{% static 'portfolio/img/shots/nevio.jpg' %}" },
